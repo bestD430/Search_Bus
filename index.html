@@ -269,11 +269,15 @@
     }
     .eta-fare-item {
       flex: 1;
-      min-width: 80px;
-      text-align: center;
-      padding: 6px 4px;
+      min-width: 90px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+      text-align: left;
+      padding: 6px 8px 6px 6px;
       background: white;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 1px solid #e5e5ea;
     }
     .eta-fare-item.adult {
@@ -289,19 +293,30 @@
       border-color: #2E7D32;
     }
     .eta-fare-item .label {
-      display: block;
-      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      letter-spacing: 2px;
+      font-size: 0.98rem;
+      font-weight: 600;
       color: var(--muted);
-      margin-bottom: 2px;
+      flex-shrink: 0;
+      line-height: 1.15;
+      min-height: 2.1em;
     }
     .eta-fare-item.adult .label,
-    .eta-fare-item.joyyou .label { color: rgba(255,255,255,0.85); }
+    .eta-fare-item.joyyou .label { color: rgba(255,255,255,0.92); }
     .eta-fare-item.child .label { color: #880E4F; }
     .eta-fare-item .price {
-      font-weight: 700;
-      font-size: 1rem;
+      flex: 1;
+      font-weight: 800;
+      font-size: 1.48rem;
       color: var(--text);
       font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
     }
     .eta-fare-item.adult .price,
     .eta-fare-item.joyyou .price { color: #fff; }
@@ -620,26 +635,55 @@
     .eta-header-info {
       background: #1c1c1e;
       color: white;
-      padding: 16px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
     }
     .eta-route-num {
       font-size: 2.1rem;
       font-weight: 700;
-      display: inline-block;
-      padding: 4px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
       border-radius: 6px;
       letter-spacing: 0.5px;
       line-height: 1.1;
+      flex-shrink: 0;
+      align-self: center;
     }
-    .eta-dest-text { font-size: 0.95rem; color: #aeaeb2; margin-top: 4px; }
-    .eta-stop-text { font-size: 0.9rem; margin-top: 8px; }
+    .eta-header-meta {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .eta-dest-text {
+      font-size: 0.95rem;
+      color: #aeaeb2;
+      margin-top: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .eta-stop-text {
+      font-size: 0.9rem;
+      margin-top: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .eta-co-badge {
       display: inline-block;
       background: #3a3a3c;
       padding: 2px 8px;
       border-radius: 5px;
       font-size: 0.72rem;
-      margin-top: 6px;
+      margin-top: 2px;
+      align-self: flex-start;
     }
     .eta-rows { padding: 8px 0; }
     .eta-row {
@@ -846,9 +890,11 @@
       <div class="eta-area" id="etaArea">
         <div class="eta-header-info">
           <div class="eta-route-num" id="etaRoute">—</div>
-          <div class="eta-dest-text" id="etaDest">—</div>
-          <div class="eta-stop-text" id="etaStopName">—</div>
-          <div class="eta-co-badge" id="etaCo">—</div>
+          <div class="eta-header-meta">
+            <div class="eta-dest-text" id="etaDest">—</div>
+            <div class="eta-stop-text" id="etaStopName">—</div>
+            <div class="eta-co-badge" id="etaCo">—</div>
+          </div>
         </div>
         <div class="eta-fare-box" id="etaFareBox" style="display:none">
           <div class="eta-fare-title" id="etaFareTitle">車費（此站上車）</div>
@@ -862,7 +908,7 @@
               <span class="price" id="fareChild">—</span>
             </div>
             <div class="eta-fare-item joyyou">
-              <span class="label">樂悠咭</span>
+              <span class="label">樂悠</span>
               <span class="price" id="fareJoyYou">—</span>
             </div>
           </div>
@@ -2606,6 +2652,8 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
     let etaMap = null;
     let etaStopMarker = null;
     let etaUserMarker = null;
+    let etaRouteLine = null;
+    let etaStopsLayer = null;
 
     function ensureEtaMap() {
       if (etaMap) return etaMap;
@@ -2620,16 +2668,41 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         attribution: '&copy; OpenStreetMap'
       }).addTo(etaMap);
       L.control.zoom({ position: 'topleft' }).addTo(etaMap);
+      etaStopsLayer = L.layerGroup().addTo(etaMap);
       return etaMap;
     }
 
-    function updateEtaStopMap(stop) {
+    async function updateEtaStopMap(stop) {
       const map = ensureEtaMap();
       if (!map) return;
       setTimeout(() => map.invalidateSize(), 120);
 
       if (etaStopMarker) { map.removeLayer(etaStopMarker); etaStopMarker = null; }
       if (etaUserMarker) { map.removeLayer(etaUserMarker); etaUserMarker = null; }
+      if (etaRouteLine) { map.removeLayer(etaRouteLine); etaRouteLine = null; }
+      if (etaStopsLayer) etaStopsLayer.clearLayers();
+
+      // 紅色行車路線（全線），車站標記只顯示所選站
+      const stops = (state.currentStops || []).filter(s =>
+        s.lat != null && s.lng != null && !isNaN(s.lat) && !isNaN(s.lng)
+      );
+      const latlngs = stops.map(s => [s.lat, s.lng]);
+      if (latlngs.length >= 2) {
+        try {
+          const roadPath = await fetchRoadPath(latlngs);
+          etaRouteLine = L.polyline(roadPath, {
+            color: '#E4002B',
+            weight: 5,
+            opacity: 0.9,
+            lineJoin: 'round',
+            lineCap: 'round'
+          }).addTo(map);
+        } catch (e) {
+          etaRouteLine = L.polyline(latlngs, {
+            color: '#E4002B', weight: 5, opacity: 0.85
+          }).addTo(map);
+        }
+      }
 
       const hasStop = stop && stop.lat != null && stop.lng != null && !isNaN(stop.lat) && !isNaN(stop.lng);
       if (hasStop) {
@@ -2640,26 +2713,31 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
           iconSize: [30, 30],
           iconAnchor: [15, 15]
         });
+        const dest = state.directionLabel || '';
         etaStopMarker = L.marker([stop.lat, stop.lng], { icon })
           .addTo(map)
-          .bindPopup(`<b>${num}. ${stop.name || ''}</b><br>往 ${state.directionLabel || ''}`);
+          .bindPopup(
+            `<b>${num}. ${stop.name || ''}</b>` +
+            (dest ? `<br>往 ${dest}` : ''),
+            { autoClose: false, closeOnClick: false }
+          );
+        // 聚焦所選站並自動打開氣泡（如附圖）
         map.setView([stop.lat, stop.lng], 17);
+        setTimeout(() => {
+          try { etaStopMarker.openPopup(); } catch (_) {}
+        }, 180);
+      } else if (latlngs.length) {
+        map.fitBounds(L.latLngBounds(latlngs).pad(0.15));
+      } else if (state.userLat != null) {
+        map.setView([state.userLat, state.userLng], 16);
+      } else {
+        map.setView([22.3193, 114.1694], 12);
       }
 
       if (state.userLat != null && state.userLng != null) {
         etaUserMarker = L.circleMarker([state.userLat, state.userLng], {
           radius: 8, color: '#fff', weight: 2, fillColor: '#007AFF', fillOpacity: 1
         }).addTo(map).bindPopup('我的位置');
-        if (hasStop) {
-          const b = L.latLngBounds([[stop.lat, stop.lng], [state.userLat, state.userLng]]);
-          map.fitBounds(b.pad(0.35));
-        } else {
-          map.setView([state.userLat, state.userLng], 16);
-        }
-      }
-
-      if (!hasStop && state.userLat == null) {
-        map.setView([22.3193, 114.1694], 12);
       }
     }
 
