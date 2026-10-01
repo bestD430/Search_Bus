@@ -274,19 +274,36 @@
       border-radius: 8px;
       border: 1px solid #e5e5ea;
     }
+    .eta-fare-item.adult {
+      background: #1565C0;
+      border-color: #1565C0;
+    }
+    .eta-fare-item.child {
+      background: #F8BBD0;
+      border-color: #F8BBD0;
+    }
+    .eta-fare-item.joyyou {
+      background: #2E7D32;
+      border-color: #2E7D32;
+    }
     .eta-fare-item .label {
       display: block;
       font-size: 0.7rem;
       color: var(--muted);
       margin-bottom: 2px;
     }
+    .eta-fare-item.adult .label,
+    .eta-fare-item.joyyou .label { color: rgba(255,255,255,0.85); }
+    .eta-fare-item.child .label { color: #880E4F; }
     .eta-fare-item .price {
       font-weight: 700;
       font-size: 1rem;
       color: var(--text);
       font-variant-numeric: tabular-nums;
     }
-    .eta-fare-item.joyyou .price { color: #e65100; }
+    .eta-fare-item.adult .price,
+    .eta-fare-item.joyyou .price { color: #fff; }
+    .eta-fare-item.child .price { color: #880E4F; }
     .eta-fare-note {
       margin-top: 6px;
       font-size: 0.68rem;
@@ -310,9 +327,9 @@
       font-variant-numeric: tabular-nums;
       white-space: nowrap;
     }
-    .stop-fare-tag.adult { background: #e8f4fc; color: #005a9e; }
-    .stop-fare-tag.child { background: #e8f8ee; color: #1b7a3d; }
-    .stop-fare-tag.joyyou { background: #fff3e0; color: #e65100; font-weight: 600; }
+    .stop-fare-tag.adult { background: #1565C0; color: #fff; }
+    .stop-fare-tag.child { background: #F8BBD0; color: #880E4F; }
+    .stop-fare-tag.joyyou { background: #2E7D32; color: #fff; font-weight: 600; }
     .stop-fare-tag.none { background: transparent; color: var(--muted); }
 
     .key-row {
@@ -833,13 +850,13 @@
           <div class="eta-co-badge" id="etaCo">—</div>
         </div>
         <div class="eta-fare-box" id="etaFareBox" style="display:none">
-          <div class="eta-fare-title">車費（全程參考）</div>
+          <div class="eta-fare-title" id="etaFareTitle">車費（此站上車）</div>
           <div class="eta-fare-row">
-            <div class="eta-fare-item">
+            <div class="eta-fare-item adult">
               <span class="label">正價</span>
               <span class="price" id="fareAdult">—</span>
             </div>
-            <div class="eta-fare-item">
+            <div class="eta-fare-item child">
               <span class="label">小童</span>
               <span class="price" id="fareChild">—</span>
             </div>
@@ -985,31 +1002,53 @@
       return { full, sectionFares: section };
     }
 
-    function fillEtaFareUI(full, route) {
+    function fillEtaFareUI(adult, route, opts) {
+      opts = opts || {};
       const adultEl = document.getElementById('fareAdult');
       const childEl = document.getElementById('fareChild');
       const joyEl = document.getElementById('fareJoyYou');
       const noteEl = document.getElementById('fareNote');
+      const titleEl = document.getElementById('etaFareTitle');
       const box = document.getElementById('etaFareBox');
       if (!box) return;
       box.style.display = 'block';
-      if (full == null) {
+      if (titleEl) {
+        titleEl.textContent = opts.title || '車費（此站上車）';
+      }
+      if (adult == null || isNaN(adult)) {
         if (adultEl) adultEl.textContent = '—';
         if (childEl) childEl.textContent = '—';
         if (joyEl) joyEl.textContent = '—';
-        if (noteEl) noteEl.textContent = '暫無此路線全程車費資料（可能為分段收費或資料未更新）';
+        if (noteEl) noteEl.textContent = opts.emptyNote || '暫無此站分段車費資料（可能為總站或資料未更新）';
         return;
       }
-      if (adultEl) adultEl.textContent = formatHKD(full);
-      if (childEl) childEl.textContent = formatHKD(computeChild(full));
-      if (joyEl) joyEl.textContent = formatHKD(computeJoyYou(full, route));
+      if (adultEl) adultEl.textContent = formatHKD(adult);
+      if (childEl) childEl.textContent = formatHKD(computeChild(adult));
+      if (joyEl) joyEl.textContent = formatHKD(computeJoyYou(adult, route));
       if (noteEl) {
         if (isAirportRoute(route)) {
-          noteEl.textContent = 'A／NA 線不適用政府「兩蚊兩折」；樂悠咭按巴士公司半價優惠。下列為全程參考，實際以八達通／車長為準。';
+          noteEl.textContent = '資料參考巴士公司公開車費。A／NA 線不適用政府「兩蚊兩折」；樂悠咭按半價優惠。實際以八達通／車長為準。';
         } else {
-          noteEl.textContent = '樂悠咭按政府「兩蚊兩折」。下列為全程參考；車站列表顯示各站上車分段收費，實際以八達通／車長為準。';
+          noteEl.textContent = '資料參考巴士公司公開分段車費。樂悠咭按政府「兩蚊兩折」：≤$10 收 $2，>$10 收兩折。實際以八達通／車長為準。';
         }
       }
+    }
+
+    function getSelectedStopSectionFare() {
+      const section = state._sectionFares;
+      if (!section || !section.length) return null;
+      const stops = state.currentStops || [];
+      if (!stops.length) return null;
+      const sid = state.stopId;
+      let idx = -1;
+      if (sid != null) {
+        idx = stops.findIndex(s => String(s.id) === String(sid));
+      }
+      if (idx < 0 && state.selectedStop) {
+        idx = stops.findIndex(s => String(s.id) === String(state.selectedStop.id));
+      }
+      if (idx < 0) return null;
+      return section[idx] != null ? section[idx] : null;
     }
 
     async function updateFareDisplay() {
@@ -1029,8 +1068,22 @@
         stopCount
       );
       state._sectionFares = sectionFares;
-      fillEtaFareUI(full, state.route);
-      // 若站列表已渲染，補上各站分段車費
+      state._fullFare = full;
+
+      // 到站頁：優先顯示所選車站的分段收費
+      const sectionAdult = getSelectedStopSectionFare();
+      if (sectionAdult != null) {
+        fillEtaFareUI(sectionAdult, state.route, { title: '車費（此站上車）' });
+      } else if (full != null) {
+        fillEtaFareUI(full, state.route, {
+          title: '車費（全程參考）',
+          emptyNote: '暫無此站分段資料，以下為全程參考'
+        });
+      } else {
+        fillEtaFareUI(null, state.route, {});
+      }
+
+      // 路線圖站列：補上各站分段車費
       if (sectionFares && document.getElementById('stopList')) {
         applySectionFaresToStopList();
       }
@@ -2975,6 +3028,4 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
     setInterval(loadWeather, 10 * 60 * 1000);
   </script>
 </body>
-</html>
-
 </html>
