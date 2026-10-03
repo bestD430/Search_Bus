@@ -1063,27 +1063,57 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
     .favs-header button:active { opacity: 0.85; }
-    .fav-card-del {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      width: 26px;
-      height: 26px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.35);
-      color: #fff;
-      font-size: 0.95rem;
-      line-height: 1;
-      cursor: pointer;
+    /* 左欄：公司標誌在上、刪除鈕在下（對齊附圖） */
+    .fav-co-col {
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-shrink: 0;
+      align-self: stretch;
+      width: 34px;
+    }
+    /* 淺色圓形底 + 公司色垃圾桶圖示 */
+    .fav-card-del {
+      position: static;
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+      border: 2px solid rgba(255,255,255,0.95);
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #fff 0%, #f4f4f4 55%, #e8e8e8 100%);
+      color: #e65100;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       z-index: 2;
       padding: 0;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.22), inset 0 1px 0 #fff;
+      line-height: 0;
     }
-    .fav-card-del:active { background: rgba(0,0,0,0.55); transform: scale(0.92); }
-    .fav-card.co-ctb .fav-card-del { background: rgba(0,0,0,0.28); }
+    .fav-card-del svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+      fill: currentColor;
+      pointer-events: none;
+    }
+    .fav-card-del:active {
+      transform: scale(0.92);
+      filter: brightness(0.96);
+    }
+    .fav-card.co-kmb .fav-card-del { color: #c62828; border-color: #fff; }
+    .fav-card.co-lwb .fav-card-del { color: #ef6c00; border-color: #fff; }
+    .fav-card.co-ctb .fav-card-del { color: #f9a825; border-color: #fff; background: #fff; }
+    .fav-card.co-nlb .fav-card-del { color: #2e7d32; border-color: #fff; }
+    .fav-card.co-gmb .fav-card-del,
+    .fav-card.co-gmb-hki .fav-card-del,
+    .fav-card.co-gmb-kln .fav-card-del,
+    .fav-card.co-gmb-nt .fav-card-del { color: #00897b; border-color: #fff; }
+    .fav-card.co-mtrbus .fav-card-del { color: #1565c0; border-color: #fff; }
     .favs-settings {
       display: none;
       background: rgba(255,255,255,0.95);
@@ -1132,13 +1162,14 @@
     }
     #pageFavs .fav-co-badge {
       font-size: calc(0.79rem * var(--fav-font-scale));
-      height: calc(1.98rem * var(--fav-font-scale));
+      min-height: calc(1.98rem * var(--fav-font-scale));
+      height: auto;
     }
     #pageFavs .fav-stop-name {
-      font-size: calc(0.88rem * var(--fav-font-scale));
+      font-size: calc(1.02rem * var(--fav-font-scale));
     }
     #pageFavs .fav-dest {
-      font-size: calc(0.75rem * var(--fav-font-scale));
+      font-size: calc(0.78rem * var(--fav-font-scale));
     }
     #pageFavs .fav-eta-main {
       font-size: calc(1.155rem * var(--fav-font-scale));
@@ -1161,8 +1192,8 @@
       gap: 10px;
     }
     .fav-card {
-      border-radius: 14px;
-      padding: 10px 12px 9px;
+      border-radius: 16px;
+      padding: 12px 12px 11px;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -1182,13 +1213,14 @@
       flex: 1;
       min-width: 0;
       display: flex;
-      flex-direction: column;
-      gap: 2px;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 8px;
     }
     .fav-card-top {
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-start;
       gap: 8px;
     }
     .fav-co-badge {
@@ -1196,19 +1228,26 @@
       font-weight: 800;
       background: rgba(255,255,255,0.22);
       color: #fff;
-      padding: 3px 4px;
+      padding: 3px 5px;
       border-radius: 8px;
       letter-spacing: 0;
       flex-shrink: 0;
-      line-height: 1.05;
-      writing-mode: vertical-rl;
-      text-orientation: upright;
-      height: 1.98rem;
+      line-height: 1.15;
+      /* 用直向 flex，上→下順序正確（九巴／城巴／龍運…） */
+      writing-mode: horizontal-tb;
+      text-orientation: mixed;
+      height: auto;
+      min-height: 1.98rem;
       box-sizing: border-box;
       text-align: center;
       display: inline-flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+    }
+    .fav-co-badge .fav-co-char {
+      display: block;
+      line-height: 1.15;
     }
     .fav-card.co-ctb .fav-co-badge {
       background: rgba(0,0,0,0.12);
@@ -1216,10 +1255,12 @@
     }
     .fav-card-text {
       min-width: 0;
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      padding-left: 36px; /* 與路線號左緣對齊（標籤寬+間距） */
+      justify-content: center;
+      gap: 1px;
+      padding-left: 0;
     }
     .fav-route-num {
       font-size: 1.925rem;
@@ -1232,18 +1273,21 @@
     }
     .fav-card.co-ctb .fav-route-num { color: #111; }
     .fav-stop-name {
-      font-size: 0.88rem;
-      font-weight: 700;
-      opacity: 0.98;
+      font-size: 1.02rem;
+      font-weight: 800;
+      opacity: 1;
+      line-height: 1.2;
+      margin-top: 1px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .fav-card.co-ctb .fav-stop-name { color: #222; }
     .fav-dest {
-      font-size: 0.75rem;
-      opacity: 0.85;
-      margin-top: 0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      opacity: 0.92;
+      margin-top: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1681,6 +1725,16 @@
         <button type="button" class="action-sheet-btn" id="btnShareRoute">分享此路線</button>
       </div>
       <button type="button" class="action-sheet-cancel" onclick="closeStopActionSheet()">取消</button>
+    </div>
+  </div>
+
+  <div class="action-sheet-mask" id="favDeleteSheet" onclick="if(event.target===this)closeFavDeleteConfirm()">
+    <div class="action-sheet">
+      <div class="action-sheet-card">
+        <div class="action-sheet-title" id="favDeleteTitle">確定刪除此收藏路線？</div>
+        <button type="button" class="action-sheet-btn destructive" onclick="confirmFavDelete()">確認</button>
+      </div>
+      <button type="button" class="action-sheet-cancel" onclick="closeFavDeleteConfirm()">返回</button>
     </div>
   </div>
 
@@ -4270,7 +4324,7 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
     }
 
     function coShortName(co) {
-      // 兩字直排：上字下字
+      // 正確兩字簡稱（上字→下字）
       const m = {
         kmb: '九巴',
         lwb: '龍運',
@@ -4280,6 +4334,13 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         mtrbus: '港鐵'
       };
       return m[co] || '巴士';
+    }
+
+    /** 直排 HTML：每個字獨立一行，避免 writing-mode 在 iOS 反序 */
+    function coShortNameHtml(co) {
+      return Array.from(coShortName(co)).map(ch =>
+        `<span class="fav-co-char">${ch}</span>`
+      ).join('');
     }
 
     function favCardClass(item) {
@@ -4382,11 +4443,39 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       if (panel.classList.contains('show')) applyFavDisplaySettings(true);
     }
 
-    function removeFavItem(item, ev) {
-      if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+    let _pendingFavDelete = null;
+
+    function openFavDeleteConfirm(item) {
+      _pendingFavDelete = item;
+      const mask = document.getElementById('favDeleteSheet');
+      const title = document.getElementById('favDeleteTitle');
+      if (title) {
+        const co = coShortName(item.co);
+        const route = item.route || '';
+        const stop = item.stopName || '';
+        title.textContent = `確定刪除「${co} ${route}」${stop ? '（' + stop + '）' : ''}？`;
+      }
+      if (mask) mask.classList.add('show');
+    }
+
+    function closeFavDeleteConfirm() {
+      const mask = document.getElementById('favDeleteSheet');
+      if (mask) mask.classList.remove('show');
+      _pendingFavDelete = null;
+    }
+
+    function confirmFavDelete() {
+      const item = _pendingFavDelete;
+      closeFavDeleteConfirm();
+      if (!item) return;
       toggleFav(item);
       renderFavsPage();
       updateHeaderFavBtns();
+    }
+
+    function removeFavItem(item, ev) {
+      if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+      openFavDeleteConfirm(item);
     }
 
     function renderFavsPage() {
@@ -4408,13 +4497,13 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         card.className = 'fav-card ' + favCardClass(item);
         card.dataset.favIdx = String(idx);
         card.innerHTML = `
-          <button type="button" class="fav-card-del" title="刪除收藏" aria-label="刪除">×</button>
           <div class="fav-card-left">
-            <div class="fav-card-top">
-              <span class="fav-co-badge">${coShortName(item.co)}</span>
-              <div class="fav-route-num">${item.route}</div>
+            <div class="fav-co-col">
+              <span class="fav-co-badge">${coShortNameHtml(item.co)}</span>
+              <button type="button" class="fav-card-del" title="刪除收藏" aria-label="刪除"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3.2h6a.8.8 0 0 1 .8.8V5h3.4a.8.8 0 0 1 0 1.6h-.7l-.8 11.2A2 2 0 0 1 15.7 20H8.3a2 2 0 0 1-2-2.2L5.5 6.6h-.7a.8.8 0 0 1 0-1.6H8.2V4a.8.8 0 0 1 .8-.8zM9.6 5h4.8V4.6H9.6V5zm-2.3 1.6l.7 10.6a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5l.7-10.6H7.3zM10 9.1a.7.7 0 0 1 .7.7v6.2a.7.7 0 0 1-1.4 0V9.8a.7.7 0 0 1 .7-.7zm4 0a.7.7 0 0 1 .7.7v6.2a.7.7 0 0 1-1.4 0V9.8a.7.7 0 0 1 .7-.7z"/></svg></button>
             </div>
             <div class="fav-card-text">
+              <div class="fav-route-num">${item.route}</div>
               <div class="fav-stop-name">${item.stopName || '—'}</div>
               <div class="fav-dest">往 ${item.dest || '—'}</div>
             </div>
@@ -4424,7 +4513,11 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
             <div class="fav-eta-sub"></div>
           </div>
         `;
-        card.querySelector('.fav-card-del').addEventListener('click', (e) => removeFavItem(item, e));
+        card.querySelector('.fav-card-del').addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          openFavDeleteConfirm(item);
+        });
         card.addEventListener('click', (e) => {
           if (e.target.closest('.fav-card-del')) return;
           openFavItem(item);
