@@ -582,7 +582,7 @@
       height: 40px;
       border-radius: 10px;
       border: none;
-      background: white;
+      background: #ffffff; border: 1.5px solid #90a4ae; box-shadow: 0 2px 6px rgba(0,0,0,0.12);
       box-shadow: 0 2px 8px rgba(0,0,0,.18);
       font-size: 1.15rem;
       cursor: pointer;
@@ -630,10 +630,11 @@
       box-shadow: inset 3px 0 0 var(--primary);
     }
     .stop-seq {
-      font-size: 0.85rem;
-      color: var(--muted);
-      min-width: 28px;
-      font-weight: 600;
+      width: 36px; height: 36px; border-radius: 10px;
+      background: #1565C0; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.95rem; flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(21,101,192,0.35);
     }
     .stop-name { font-size: 0.98rem; font-weight: 500; flex: 1; min-width: 0; }
     .stop-actions {
@@ -648,28 +649,33 @@
     .stop-nearby-btn,
     .stop-more-btn {
       flex-shrink: 0;
-      width: 32px;
-      height: 28px;
-      border: none;
-      border-radius: 8px;
-      background: #eef3f8;
-      color: #1565C0;
-      font-size: 0.95rem;
+      width: 34px;
+      height: 30px;
+      border: 1.5px solid #c5d0dc;
+      border-radius: 9px;
+      background: #ffffff;
+      color: #0d47a1;
+      font-size: 1rem;
+      font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       padding: 0;
       line-height: 1;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
     .stop-journey-btn:active,
     .stop-alight-btn:active,
     .stop-nearby-btn:active,
-    .stop-more-btn:active { background: #d6e8f7; transform: scale(0.94); }
-    .stop-more-btn { font-size: 1.05rem; color: #3a3a3c; }
-    .stop-nearby-btn { font-size: 0.9rem; }
-    .stop-alight-btn { background: #fff0f0; color: #E4002B; font-size: 0.88rem; }
-    .stop-alight-btn:active { background: #ffd6d6; }
+    .stop-more-btn:active { background: #e3f2fd; transform: scale(0.94); }
+    .stop-journey-btn { color: #1565C0; border-color: #90caf9; background: #e3f2fd; }
+    .stop-alight-btn {
+      background: #ffebee; color: #c62828; border-color: #ef9a9a; font-size: 0.95rem;
+    }
+    .stop-alight-btn:active { background: #ffcdd2; }
+    .stop-nearby-btn { font-size: 0.95rem; color: #2e7d32; border-color: #a5d6a7; background: #e8f5e9; }
+    .stop-more-btn { font-size: 1.1rem; color: #37474f; border-color: #b0bec5; background: #eceff1; }
     .stop-nearby-box {
       display: none;
       background: #f4f7fb;
@@ -943,7 +949,7 @@
     }
     #pageAlight.active { display: flex !important; }
     .alight-header-bar {
-      background: #E4002B; color: #fff; padding: 12px 10px;
+      background: #007AFF; color: #fff; padding: 12px 10px;
       display: flex; align-items: center; gap: 8px; flex-shrink: 0;
     }
     .alight-header-bar .back-btn {
@@ -2927,7 +2933,7 @@
 
     <div class="page" id="pageAlight">
       <div class="alight-header-bar">
-        <button type="button" class="back-btn" onclick="stopAlightTrack()">‹</button>
+        <button type="button" class="back-btn" onclick="goStops()">‹</button>
         <div class="title" id="alightTitle">落車提示</div>
         <button type="button" class="stop-track-btn" onclick="stopAlightTrack()">停止</button>
       </div>
@@ -4718,7 +4724,27 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         });
 
         // 更新地圖（只含此方向車站）
-        setTimeout(() => updateRouteMap(stops, nearestId), 50);
+        setTimeout(() => {
+          updateRouteMap(stops, nearestId);
+        if (nearestId) {
+          setTimeout(function() {
+            try {
+              var nearEl = document.querySelector('.stop-item-wrap[data-stop-id="' + CSS.escape(String(nearestId)) + '"]');
+              if (nearEl) {
+                nearEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                nearEl.classList.add('nearest');
+              }
+            } catch (e) {}
+          }, 100);
+        }
+          if (nearestId) {
+            const nearEl = document.querySelector('.stop-item-wrap[data-stop-id="' + CSS.escape(String(nearestId)) + '"]');
+            if (nearEl) {
+              nearEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              nearEl.classList.add('nearest');
+            }
+          }
+        }, 50);
         await updateFareDisplay();
       } catch (e) {
         console.error('renderStops error', e);
@@ -5028,6 +5054,17 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         listEl.appendChild(wrap);
       });
       updateRouteMap(stops, nearestId);
+        if (nearestId) {
+          setTimeout(function() {
+            try {
+              var nearEl = document.querySelector('.stop-item-wrap[data-stop-id="' + CSS.escape(String(nearestId)) + '"]');
+              if (nearEl) {
+                nearEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                nearEl.classList.add('nearest');
+              }
+            } catch (e) {}
+          }, 100);
+        }
       // 異步補上車費（不阻塞列表）
       updateFareDisplay().catch(e => console.warn('fare update', e));
     }
@@ -5592,10 +5629,16 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       refreshActivePageEta(true);
     });
 
-    async function toggleStopNearbyRoutes(stop, wrapEl) {
+    var _stopNearbyRadius = 500;
+    try {
+      var _nr = parseInt(localStorage.getItem('hkbus_nearby_radius_m') || '500', 10);
+      if ([50, 100, 200, 300, 400, 500].indexOf(_nr) >= 0) _stopNearbyRadius = _nr;
+    } catch (e) {}
+
+    async function toggleStopNearbyRoutes(stop, wrapEl, forceRadius) {
       const box = wrapEl.querySelector('[data-stop-nearby]');
       if (!box) return;
-      const opening = !wrapEl.classList.contains('nearby-open');
+      const opening = !wrapEl.classList.contains('nearby-open') || forceRadius != null;
       document.querySelectorAll('.stop-item-wrap.nearby-open').forEach(el => {
         if (el !== wrapEl) {
           el.classList.remove('nearby-open');
@@ -5603,25 +5646,48 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
           if (b) b.innerHTML = '';
         }
       });
-      if (!opening) {
+      if (!opening && forceRadius == null) {
         wrapEl.classList.remove('nearby-open');
         box.innerHTML = '';
         return;
       }
       wrapEl.classList.add('nearby-open');
-      box.innerHTML = '<div class="stop-nearby-empty">搜尋鄰近 500 米路線…</div>';
+      const radius = (forceRadius != null) ? forceRadius : _stopNearbyRadius;
+      _stopNearbyRadius = radius;
+      try { localStorage.setItem('hkbus_nearby_radius_m', String(radius)); } catch (e) {}
+
+      function radiusBarHtml(active) {
+        const opts = [50, 100, 200, 300, 400, 500];
+        return '<div class="stop-nearby-radius"><span class="nr-label">距離</span>' +
+          opts.map(function(m) {
+            return '<button type="button" data-nr="' + m + '"' +
+              (m === active ? ' class="active"' : '') + '>' + m + '米</button>';
+          }).join('') + '</div>';
+      }
+      function bindRadius() {
+        box.querySelectorAll('[data-nr]').forEach(function(btn) {
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleStopNearbyRoutes(stop, wrapEl, parseInt(btn.getAttribute('data-nr'), 10));
+          });
+        });
+      }
+
+      box.innerHTML = radiusBarHtml(radius) +
+        '<div class="stop-nearby-empty">搜尋鄰近 ' + radius + ' 米路線…</div>';
+      bindRadius();
 
       async function ensureLoc() {
         if (state.userLat != null && state.userLng != null) return true;
         if (!navigator.geolocation) return false;
-        return await new Promise(resolve => {
+        return await new Promise(function(resolve) {
           navigator.geolocation.getCurrentPosition(
-            pos => {
+            function(pos) {
               state.userLat = pos.coords.latitude;
               state.userLng = pos.coords.longitude;
               resolve(true);
             },
-            () => resolve(false),
+            function() { resolve(false); },
             { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
           );
         });
@@ -5632,79 +5698,91 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         const centerLat = (stop.lat != null) ? Number(stop.lat) : state.userLat;
         const centerLng = (stop.lng != null) ? Number(stop.lng) : state.userLng;
         if (centerLat == null || centerLng == null || isNaN(centerLat) || isNaN(centerLng)) {
-          box.innerHTML = '<div class="stop-nearby-empty">未能定位此站，請允許位置權限後再試</div>';
+          box.innerHTML = radiusBarHtml(radius) +
+            '<div class="stop-nearby-empty">未能定位此站，請允許位置權限後再試</div>';
+          bindRadius();
           return;
         }
         const { stopList } = await ensureStopIndex();
-        const RADIUS = 500;
         const nearbyStops = [];
         for (const [id, info] of Object.entries(stopList)) {
           const loc = info.location || {};
           const slat = parseFloat(loc.lat), slng = parseFloat(loc.lng);
           if (isNaN(slat) || isNaN(slng)) continue;
           const d = haversineM(centerLat, centerLng, slat, slng);
-          if (d <= RADIUS) {
+          if (d <= radius) {
             nearbyStops.push({
-              id,
-              name: (info.name && (info.name.zh || info.name.en)) || id,
-              lat: slat,
-              lng: slng,
-              distFromStop: d,
+              id, name: (info.name && (info.name.zh || info.name.en)) || id,
+              lat: slat, lng: slng, distFromStop: d,
               distFromUser: (state.userLat != null)
                 ? haversineM(state.userLat, state.userLng, slat, slng) : null
             });
           }
         }
-        nearbyStops.sort((a, b) => a.distFromStop - b.distFromStop);
+        nearbyStops.sort(function(a, b) { return a.distFromStop - b.distFromStop; });
         const sample = nearbyStops.slice(0, 16);
         const seen = new Set();
         const rows = [];
-        const lists = await Promise.all(sample.map(async ns => {
+        const lists = await Promise.all(sample.map(async function(ns) {
           try {
-            const routes = await fetchRoutesAtStop(ns.id, { skipEta: true });
-            return { ns, routes };
-          } catch (_) {
-            return { ns, routes: [] };
+            const routes = await fetchRoutesAtStop(ns.id, { skipEta: false });
+            return { ns: ns, routes: routes };
+          } catch (e) {
+            return { ns: ns, routes: [] };
           }
         }));
-        for (const { ns, routes } of lists) {
-          for (const r of routes) {
+        for (const item of lists) {
+          for (const r of item.routes) {
             const key = String(r.co) + '|' + String(r.route) + '|' + String(r.dest || '') + '|' + String(r.dir || '');
             if (seen.has(key)) continue;
             seen.add(key);
-            rows.push({ r, stop: ns });
+            rows.push({ r: r, stop: item.ns });
           }
         }
-        rows.sort((a, b) => {
+        const now = Date.now();
+        rows.sort(function(a, b) {
           const da = a.stop.distFromUser != null ? a.stop.distFromUser : a.stop.distFromStop;
           const db = b.stop.distFromUser != null ? b.stop.distFromUser : b.stop.distFromStop;
           if (da !== db) return da - db;
+          const ae = (a.r.etas && a.r.etas[0]) ? new Date(a.r.etas[0]).getTime() : Infinity;
+          const be = (b.r.etas && b.r.etas[0]) ? new Date(b.r.etas[0]).getTime() : Infinity;
+          if (ae !== be) return ae - be;
           return String(a.r.route).localeCompare(String(b.r.route), 'en', { numeric: true });
         });
         if (!rows.length) {
-          box.innerHTML = '<div class="stop-nearby-empty">附近 500 米沒有其他路線</div>';
+          box.innerHTML = radiusBarHtml(radius) +
+            '<div class="stop-nearby-empty">附近 ' + radius + ' 米沒有其他路線</div>';
+          bindRadius();
           return;
         }
         function fmtM(m) {
           if (m == null) return '—';
           return m < 1000 ? Math.round(m) + ' 米' : (m / 1000).toFixed(1) + ' km';
         }
-        const userHint = (state.userLat != null)
-          ? '距離為與現在位置'
-          : '距離為與此站';
-        box.innerHTML = '<div class="stop-nearby-head">鄰近 500 米路線 · ' + userHint + '</div>';
-        rows.slice(0, 30).forEach(item => {
+        function fmtFirstEta(r) {
+          if (!r.etas || !r.etas.length) return { text: '—', cls: 'none' };
+          const mins = Math.round((new Date(r.etas[0]).getTime() - now) / 60000);
+          if (mins <= 0) return { text: '即將', cls: 'soon' };
+          return { text: mins + '分', cls: mins <= 5 ? 'soon' : '' };
+        }
+        const userHint = (state.userLat != null) ? '距離為與現在位置' : '距離為與此站';
+        box.innerHTML = radiusBarHtml(radius) +
+          '<div class="stop-nearby-head">鄰近 ' + radius + ' 米路線 · ' + userHint + '</div>';
+        bindRadius();
+        rows.slice(0, 30).forEach(function(item) {
           const r = item.r, ns = item.stop;
           const dist = (state.userLat != null) ? ns.distFromUser : ns.distFromStop;
           const plate = (typeof plateClass === 'function') ? plateClass({ co: r.co, route: r.route }) : '';
+          const eta = fmtFirstEta(r);
           const row = document.createElement('div');
           row.className = 'stop-nearby-row';
           row.innerHTML =
             '<div class="nr-num ' + plate + '">' + displayRouteName(r) + '</div>' +
             '<div class="nr-main"><div class="nr-dest">往 ' + (r.dest || '—') + '</div>' +
             '<div class="nr-meta">' + coLabel(r.co) + ' · ' + (ns.name || '') + '</div></div>' +
+            '<div class="nr-eta ' + eta.cls + '">' + eta.text + '</div>' +
             '<div class="nr-dist">🚶 ' + fmtM(dist) + '</div>';
-          row.addEventListener('click', (e) => {
+          row.addEventListener('click', function(e) {
             e.stopPropagation();
             openNearbyRoute(r, ns);
           });
@@ -5712,7 +5790,9 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         });
       } catch (err) {
         console.warn(err);
-        box.innerHTML = '<div class="stop-nearby-empty">載入失敗，請再試</div>';
+        box.innerHTML = radiusBarHtml(radius) +
+          '<div class="stop-nearby-empty">載入失敗，請再試</div>';
+        bindRadius();
       }
     }
 
@@ -6543,13 +6623,17 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       }
     }
 
-    function stopAlightTrack() {
+    function endAlightTrackingOnly() {
       if (alightWatchId != null && navigator.geolocation) {
         try { navigator.geolocation.clearWatch(alightWatchId); } catch (e) {}
         alightWatchId = null;
       }
       if (alightTimer) { clearInterval(alightTimer); alightTimer = null; }
       _alightState = null;
+    }
+
+    function stopAlightTrack() {
+      endAlightTrackingOnly();
       closeAlightToast();
       goStops();
     }
@@ -6623,6 +6707,12 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         showAlightToast('final',
           '即將到達目的地：' + destName + (destId ? ' (' + destId + ')' : ''),
           '車站，請記得帶齊所有私人物品，拜拜！');
+        // 行程結束：數秒後自動停止背景追蹤（提示仍可關閉）
+        setTimeout(function () {
+          if (_alightState && _alightState.alerted && _alightState.alerted.final) {
+            endAlightTrackingOnly();
+          }
+        }, 15000);
       }
     }
 
@@ -6882,15 +6972,8 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       const pg = document.getElementById(pageId);
       if (pg) pg.classList.add('active');
       try { updateWhenChips(); } catch (_) {}
-      if (pageId !== 'pageAlight') {
-        if (typeof alightWatchId !== 'undefined' && alightWatchId != null && navigator.geolocation) {
-          try { navigator.geolocation.clearWatch(alightWatchId); } catch (_) {}
-          alightWatchId = null;
-        }
-        if (typeof alightTimer !== 'undefined' && alightTimer) {
-          clearInterval(alightTimer); alightTimer = null;
-        }
-      }
+      // 落車追蹤在背景繼續，僅按「停止」或行程結束才中止
+
       if (pageNeedsEtaAuto(pageId)) {
         startAutoRefresh(false);
       } else {
@@ -9408,7 +9491,7 @@ const prefBtn = document.getElementById('planPrefBtn');
       if (!track) return;
       const imgs = track.querySelectorAll('img');
       imgs.forEach(function(img) { img.src = BUS_STRIP; img.decoding = 'async'; });
-      const speed = 48;
+      const speed = 24;
       let loopW = 0, x = 0, last = 0, raf = 0;
       function measure() {
         const img = imgs[0];
