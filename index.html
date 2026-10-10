@@ -625,6 +625,18 @@
     }
     .stop-item:active { background: #f2f2f7; }
     .stop-item-wrap.nearest .stop-item { background: #e8f6ff; }
+    .stop-item-wrap.nearest .stop-seq {
+      background: #00A0E9;
+      color: #fff;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      box-shadow: 0 0 0 3px rgba(0, 160, 233, 0.3);
+    }
     .stop-item-wrap.selected-stop .stop-item { background: #d6f0ff; }
     .stop-item-wrap.selected-stop {
       box-shadow: inset 3px 0 0 var(--primary);
@@ -1000,10 +1012,11 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.3);
     }
     .stop-marker-icon.active {
-      background: #ff3b30;
+      background: #00A0E9;
       width: 30px;
       height: 30px;
       font-size: 12px;
+      box-shadow: 0 0 0 3px rgba(0, 160, 233, 0.35), 0 1px 4px rgba(0,0,0,.3);
     }
     .eta-header-info {
       background: #1c1c1e;
@@ -6500,7 +6513,7 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       kmb: { name: '九巴／龍運', keys: ['九巴', '九龍巴士', 'KMB', '龍運', 'Long Win', 'LWB'] },
       ctb: { name: '城巴', keys: ['城巴', 'Citybus', 'CTB', '新巴'] },
       nlb: { name: '嶼巴', keys: ['嶼巴', '新大嶼山', 'NLB', '大嶼山巴士'] },
-      mtr: { name: '港鐵', keys: ['港鐵', 'MTR', '地鐵', '輕鐵', '機場快線'] }
+      mtr: { name: '港鐵', keys: ['港鐵', 'MTR', '地鐵', '輕鐵', '機場快線', '東鐵', '西鐵', '屯馬', '觀塘線', '荃灣線', '港島線', '將軍澳線', '東涌線', '南港島', '迪士尼線', '鐵路'] }
     };
 
     function openNewsPage() {
@@ -6675,7 +6688,8 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         var nameMap = {
           TWL: '荃灣線', KTL: '觀塘線', ISL: '港島線', SIL: '南港島線',
           TKL: '將軍澳線', TCL: '東涌線', AEL: '機場快線', TML: '屯馬線',
-          EAL: '東鐵線', DRL: '迪士尼線', MOL: '馬鞍山線', LR: '輕鐵'
+          EAL: '東鐵線', DRL: '迪士尼線', MOL: '馬鞍山線', LR: '輕鐵',
+          TUR: '屯馬線', WRL: '屯馬線', HCL: '港島線'
         };
         for (var i = 0; i < lines.length; i++) {
           var ln = lines[i];
@@ -6716,27 +6730,19 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         url: item.url || '',
         id: item.id || ''
       };
-      // 九巴：不載入內文，只提供原文連結
-      if (copy.src === 'kmb') {
-        copy.body = '';
-        if (!copy.url && copy.id) {
-          var y = (copy.date || '').slice(0, 4) || String(new Date().getFullYear());
-          copy.url = 'https://www.kmb.hk/news_detail.html?id=' + encodeURIComponent(copy.id) + '&year=' + y;
-        }
-        if (!copy.url) copy.url = 'https://www.kmb.hk/news.html';
-        _newsDetailItem = copy;
-        _newsView = 'detail';
-        updateNewsChrome();
-        renderNewsDetail();
-        return;
+      // 九巴若無 url 但有 id，補上原文連結
+      if (copy.src === 'kmb' && !copy.url && copy.id) {
+        var y = (copy.date || '').slice(0, 4) || String(new Date().getFullYear());
+        copy.url = 'https://www.kmb.hk/news_detail.html?id=' + encodeURIComponent(copy.id) + '&year=' + y;
       }
       _newsDetailItem = copy;
       _newsView = 'detail';
       updateNewsChrome();
       renderNewsDetail();
-      // 城巴／嶼巴：無內文時嘗試載入
+      // 無內文時即時載入（九巴／城巴／嶼巴同一方式）
       if (!copy.body) {
-        if (copy.src === 'ctb' && copy.url) loadCtbDetailBody(copy);
+        if (copy.src === 'kmb' && (copy.id || copy.url)) loadKmbDetailBody(copy);
+        else if (copy.src === 'ctb' && copy.url) loadCtbDetailBody(copy);
         else if (copy.src === 'nlb' && copy.url) loadNlbDetailBody(copy);
       }
     }
@@ -6746,25 +6752,51 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       if (bodyEl) bodyEl.textContent = '載入詳情中…';
       try {
         var year = (item.date || '').slice(0, 4) || String(new Date().getFullYear());
-        var res = await fetch('https://www.kmb.hk/storage/news_detail_' + year + '.html', { cache: 'force-cache' });
-        if (!res.ok) throw new Error('fail');
-        var html = await res.text();
-        var re = new RegExp('<div id="' + item.id + '"[^>]*>([\\s\\S]*?)(?=<div id="\\d+"|$)');
-        var m = html.match(re);
-        if (m) {
-          var chunk = m[1].replace(/<script[\s\S]*?<\/script>/gi, '');
-          chunk = chunk.replace(/<br\s*\/?>/gi, '\n')
-            .replace(/<\/p>/gi, '\n').replace(/<\/tr>/gi, '\n')
-            .replace(/<[^>]+>/g, '');
-          chunk = chunk.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
-          item.body = chunk.slice(0, 3000);
-          _newsDetailItem = item;
-          if (bodyEl) bodyEl.textContent = item.body || '暫無詳細內容';
-        } else if (bodyEl) {
-          bodyEl.textContent = item.body || '暫無詳細內容';
+        var text = '';
+        // 方式1：九巴 news_detail 彙整頁
+        try {
+          var res = await fetch('https://www.kmb.hk/storage/news_detail_' + year + '.html', { cache: 'no-store' });
+          if (res.ok && item.id) {
+            var html = await res.text();
+            html = html.replace(/<script[\s\S]*?<\/script>/gi, '');
+            var re = new RegExp('<div id="' + String(item.id).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '"[^>]*>([\\s\\S]*?)(?=<div id="\\d+"|$)');
+            var mm = html.match(re);
+            if (mm) {
+              text = mm[1].replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n').replace(/<\/tr>/gi, '\n')
+                .replace(/<[^>]+>/g, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+            }
+          }
+        } catch (e1) {}
+        // 方式2：原文頁
+        if ((!text || text.length < 20) && item.url) {
+          try {
+            var res2 = await fetch(item.url, { cache: 'no-store' });
+            if (res2.ok) {
+              var html2 = await res2.text();
+              html2 = html2.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ');
+              var m2 = html2.match(/<div[^>]*class="[^"]*content[^"]*"[^>]*>([\s\S]{80,5000}?)<\/div>/i)
+                || html2.match(/<article[^>]*>([\s\S]{80,5000}?)<\/article>/i);
+              if (m2) text = m2[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+            }
+          } catch (e2) {}
         }
+        if (!text) text = (item.title || '') + '\n\n（詳細內容請點下方連結開啟九巴原文）';
+        item.body = text.slice(0, 4000);
+        if (_newsDetailItem && (_newsDetailItem.id === item.id || _newsDetailItem.url === item.url || _newsDetailItem.title === item.title)) {
+          _newsDetailItem.body = item.body;
+          if (!_newsDetailItem.url && item.id) {
+            _newsDetailItem.url = 'https://www.kmb.hk/news_detail.html?id=' + encodeURIComponent(item.id) + '&year=' + year;
+          }
+          if (bodyEl) bodyEl.textContent = item.body;
+          // 若詳情頁尚無連結按鈕，重新渲染以顯示原文連結
+          try { renderNewsDetail(); } catch (_) {}
+        }
+        var list = _newsCache.co.kmb || [];
+        list.forEach(function(x) {
+          if ((item.id && x.id === item.id) || (item.url && x.url === item.url)) x.body = item.body;
+        });
       } catch (e) {
-        if (bodyEl) bodyEl.textContent = item.body || '未能載入詳細內容（可稍後再試）';
+        if (bodyEl) bodyEl.textContent = '載入失敗，請點下方連結開啟九巴原文。';
       }
     }
 
@@ -6780,6 +6812,10 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
             html = html.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ');
             var m = html.match(/<div[^>]*(?:press|content|detail|news)[^>]*>([\s\S]{80,4000}?)<\/div>/i);
             if (m) text = m[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+            if (!text || text.length < 40) {
+              var m2 = html.match(/<p[^>]*>([\s\S]{30,800}?)<\/p>/i);
+              if (m2) text = m2[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+            }
           }
         } catch (e) {}
         if (!text) text = (item.title || '') + '\n\n（詳細內容請點下方連結開啟城巴原文）';
@@ -6787,64 +6823,67 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         if (_newsDetailItem && _newsDetailItem.url === item.url) {
           _newsDetailItem.body = text;
           if (bodyEl) bodyEl.textContent = text;
+          try { renderNewsDetail(); } catch (_) {}
         }
+        (_newsCache.co.ctb || []).forEach(function(x) { if (x.url === item.url) x.body = text; });
       } catch (e) {
         if (bodyEl) bodyEl.textContent = '載入失敗，請點下方連結開啟城巴原文。';
       }
     }
+
     async function loadNlbDetailBody(item) {
       var bodyEl = document.getElementById('newsDetailBody');
       if (bodyEl) bodyEl.textContent = '載入詳情中…';
       try {
         var url = (item.url || '').replace('https://nlb.com.hk', 'https://www.nlb.com.hk');
         var res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) throw new Error('HTTP');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         var html = await res.text();
         html = html.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ');
         var text = '';
         var mm = html.match(/發佈日期[\s\S]{0,40}?(\d{4}-\d{2}-\d{2})([\s\S]{50,5000}?)(?:<h2|最新消息|閱讀更多|$)/i);
-        if (mm) text = (mm[2] || '').replace(/<[^>]+>/g, '\n').replace(/\n{2,}/g, '\n').trim();
+        if (mm) text = (mm[2] || '').replace(/<[^>]+>/g, '\n').replace(/\n{2,}/g, '\n').replace(/[ \t]+/g, ' ').trim();
+        if (!text || text.length < 30) {
+          var m2 = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+          var raw = m2 ? m2[1] : html;
+          text = raw.replace(/<[^>]+>/g, '\n').replace(/\n{2,}/g, '\n').replace(/[ \t]+/g, ' ').trim();
+          var cut = text.indexOf('最新消息');
+          if (cut > 80) text = text.slice(0, cut).trim();
+          if (text.length > 2000) text = text.slice(0, 2000) + '…';
+        }
         if (!text) text = (item.title || '') + '\n\n（詳細內容請點下方連結開啟嶼巴原文）';
         item.body = text;
         if (_newsDetailItem && (_newsDetailItem.url === item.url || _newsDetailItem.title === item.title)) {
           _newsDetailItem.body = text;
           if (bodyEl) bodyEl.textContent = text;
+          try { renderNewsDetail(); } catch (_) {}
         }
+        (_newsCache.co.nlb || []).forEach(function(x) {
+          if (x.url === item.url || x.title === item.title) x.body = text;
+        });
       } catch (e) {
         if (bodyEl) bodyEl.textContent = '載入失敗，請點下方連結開啟嶼巴原文。';
       }
     }
+
 
     function renderNewsDetail() {
       var body = document.getElementById('newsBody');
       if (!body || !_newsDetailItem) return;
       var item = _newsDetailItem;
       var srcName = { td: '運輸署', kmb: '九巴／龍運', ctb: '城巴', nlb: '嶼巴', mtr: '港鐵' }[item.src] || '消息';
-      var linkLabel = {
-        kmb: '開啟九巴原文 ›',
-        ctb: '開啟城巴原文 ›',
-        nlb: '開啟嶼巴原文 ›',
-        mtr: '開啟港鐵車務狀況 ›',
-        td: '開啟原文 ›'
-      }[item.src] || '開啟原文 ›';
+      var content = item.body || '暫無詳細內容';
+      var linkLabel = { kmb: '開啟九巴原文 ›', ctb: '開啟城巴原文 ›', nlb: '開啟嶼巴原文 ›', mtr: '開啟港鐵原文 ›', td: '開啟原文 ›' }[item.src] || '開啟原文 ›';
       var linkHtml = item.url
         ? ('<a class="nd-link" href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">' + linkLabel + '</a>')
         : '';
-      // 九巴：不顯示內文，只顯示連結
-      var bodyHtml = '';
-      if (item.src === 'kmb') {
-        bodyHtml = '<div class="nd-body" id="newsDetailBody" style="color:#6b7280">請按下方按鈕開啟九巴官方通告原文。</div>';
-      } else {
-        var content = item.body || '暫無詳細內容';
-        bodyHtml = '<div class="nd-body" id="newsDetailBody">' + escapeHtml(content) + '</div>';
-      }
       body.innerHTML =
         '<div class="news-detail">' +
           '<button type="button" class="nd-back" onclick="onNewsBack()">‹ 返回列表</button>' +
           '<div><span class="nd-src ' + item.src + '">' + srcName + '</span></div>' +
           '<div class="nd-date">' + escapeHtml(item.date) + '</div>' +
           '<div class="nd-title">' + escapeHtml(item.title) + '</div>' +
-          bodyHtml +
+          '<div class="nd-body" id="newsDetailBody">' + escapeHtml(content) + '</div>' +
           linkHtml +
         '</div>';
     }
@@ -6931,6 +6970,7 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
           var s = String(ln.status || 'green').toLowerCase();
           return s && s !== 'green';
         });
+        // 車務狀況總覽卡
         html += '<div class="news-card"><div class="nc-top"><span class="nc-src mtr">港鐵</span>' +
           '<span class="nc-time">車務狀況 · 即時</span></div>';
         if (abnormal.length) {
@@ -6945,6 +6985,7 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         } else {
           html += '<div class="nc-title" style="margin-bottom:6px">未能取得即時車務狀況</div>';
         }
+        // 全部路線一覽（可摺疊感：一律列出）
         if (mtr.length) {
           html += '<div style="margin-top:10px;font-size:0.75rem;font-weight:800;color:#5b6570">各線狀況</div>';
           mtr.forEach(function(ln) {
@@ -6953,9 +6994,8 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
               '<div class="news-mtr-status">' + mtrStatusLabel(ln.status) + '</div></div>';
           });
         }
-        // 與嶼巴相同：提供官方連結
-        html += '<a class="nd-link" style="margin-top:12px" href="https://www.mtr.com.hk/ch/customer/main/index.html" target="_blank" rel="noopener">開啟港鐵車務狀況 ›</a>';
         html += '</div>';
+        // 相關車務／特別交通消息
         var mtrNews = filterTdByCo('mtr');
         if (mtrNews.length) {
           html += '<div style="margin:12px 0 8px;font-size:0.8rem;font-weight:800;color:#5b6570">相關車務及特別交通消息</div>';
