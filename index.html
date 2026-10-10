@@ -1561,49 +1561,25 @@
       align-items: center;
     }
 
-    .header-news-entry {
-      border: none;
-      background: linear-gradient(135deg, #42A5F5, #1E88E5);
-      color: #fff;
-      font-size: 0.8rem;
-      font-weight: 800;
-      padding: 7px 12px;
-      border-radius: 18px;
-      cursor: pointer;
-      font-family: inherit;
-      box-shadow: 0 2px 6px rgba(30,136,229,0.35);
-      white-space: nowrap;
-    }
-    .header-news-entry:active { transform: scale(0.96); opacity: 0.9; }
-
-    /* —— 交通消息頁 —— */
     #pageNews { background: #f2f4f7; }
     .news-header {
-      background: linear-gradient(135deg, #1E88E5, #1565C0);
-      color: #fff;
-      padding: 12px 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
+      background: linear-gradient(135deg, #FFD54F, #FFC107);
+      color: #1a1a1a; padding: 12px 10px;
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
     }
     .news-header .back-btn {
-      color: #fff; background: transparent; border: none;
+      color: #1a1a1a; background: transparent; border: none;
       font-size: 1.5rem; line-height: 1; padding: 0 4px; cursor: pointer;
     }
-    .news-header .page-title {
-      flex: 1; text-align: center; font-weight: 800; font-size: 1rem;
-    }
+    .news-header .page-title { flex: 1; text-align: center; font-weight: 800; font-size: 1rem; }
     .news-header .news-refresh {
-      border: 1.5px solid rgba(255,255,255,0.7);
-      background: rgba(255,255,255,0.15); color: #fff;
-      font-size: 0.78rem; font-weight: 700; padding: 5px 10px;
+      border: 1.5px solid rgba(0,0,0,0.2); background: rgba(255,255,255,0.5);
+      color: #1a1a1a; font-size: 0.78rem; font-weight: 700; padding: 5px 10px;
       border-radius: 14px; cursor: pointer; font-family: inherit;
     }
     .news-tabs {
-      display: flex; gap: 6px; padding: 10px 10px 6px;
-      overflow-x: auto; -webkit-overflow-scrolling: touch;
-      flex-shrink: 0; background: #fff;
+      display: flex; gap: 6px; padding: 10px 10px 6px; overflow-x: auto;
+      -webkit-overflow-scrolling: touch; flex-shrink: 0; background: #fff;
       border-bottom: 1px solid #e8ecf0;
     }
     .news-tabs button {
@@ -1613,9 +1589,9 @@
       font-family: inherit; white-space: nowrap;
     }
     .news-tabs button.active {
-      background: linear-gradient(135deg, #1E88E5, #1565C0);
-      border-color: transparent; color: #fff;
-      box-shadow: 0 2px 8px rgba(30,136,229,0.3);
+      background: linear-gradient(135deg, #FFD54F, #FFC107);
+      border-color: transparent; color: #1a1a1a;
+      box-shadow: 0 2px 8px rgba(255,193,7,0.35);
     }
     .news-body {
       flex: 1; min-height: 0; overflow-y: auto;
@@ -1636,63 +1612,38 @@
     }
     .news-card .nc-src.td { background: #1565C0; }
     .news-card .nc-src.kmb { background: #E4002B; }
-    .news-card .nc-src.lwb { background: #FF6200; }
     .news-card .nc-src.ctb { background: #FFE14D; color: #1a1a1a; }
     .news-card .nc-src.nlb { background: #2E7D32; }
     .news-card .nc-src.mtr { background: #9C1A1A; }
-    .news-card .nc-time {
-      font-size: 0.72rem; color: #8e8e93; font-weight: 600;
-      white-space: nowrap;
-    }
+    .news-card .nc-time { font-size: 0.72rem; color: #8e8e93; font-weight: 600; white-space: nowrap; }
     .news-card .nc-text {
       font-size: 0.88rem; color: #1c1c1e; line-height: 1.45;
       white-space: pre-wrap; word-break: break-word;
     }
     .news-card .nc-status {
       display: inline-block; margin-top: 6px;
-      font-size: 0.7rem; font-weight: 700; padding: 2px 8px;
-      border-radius: 6px;
+      font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;
     }
     .news-card .nc-status.active { background: #ffebee; color: #c62828; }
     .news-card .nc-status.cleared { background: #e8f5e9; color: #2e7d32; }
     .news-card .nc-status.info { background: #e3f2fd; color: #1565c0; }
-    .news-link-card {
-      display: flex; align-items: center; gap: 12px;
-      background: #fff; border-radius: 14px; padding: 14px;
-      margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      border: 1px solid #eef1f5; text-decoration: none; color: inherit;
-    }
-    .news-link-card:active { background: #f5f7fa; }
-    .news-link-card .nlc-icon {
-      width: 42px; height: 42px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; font-weight: 900; color: #fff; flex-shrink: 0;
-    }
-    .news-link-card .nlc-body { flex: 1; min-width: 0; }
-    .news-link-card .nlc-title { font-size: 0.92rem; font-weight: 800; color: #1c1c1e; }
-    .news-link-card .nlc-sub { font-size: 0.75rem; color: #8e8e93; margin-top: 2px; }
-    .news-link-card .nlc-arrow { color: #c5cdd6; font-size: 1.1rem; }
-    .news-empty {
-      text-align: center; padding: 40px 16px; color: #8e8e93; font-size: 0.9rem;
-    }
+    .news-empty { text-align: center; padding: 40px 16px; color: #8e8e93; font-size: 0.9rem; }
     .news-mtr-row {
       display: flex; align-items: center; gap: 10px;
       padding: 10px 0; border-bottom: 1px solid #f0f0f0;
     }
     .news-mtr-row:last-child { border-bottom: none; }
-    .news-mtr-dot {
-      width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
-    }
+    .news-mtr-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
     .news-mtr-dot.green { background: #34c759; }
     .news-mtr-dot.yellow { background: #ffcc00; }
     .news-mtr-dot.red { background: #ff3b30; }
-    .news-mtr-dot.grey { background: #c7c7cc; }
     .news-mtr-name { flex: 1; font-size: 0.9rem; font-weight: 700; color: #1c1c1e; }
     .news-mtr-status { font-size: 0.78rem; font-weight: 700; color: #666; }
 
     .header-fav-entry,
     .header-nearby-entry,
-    .header-plan-entry {
+    .header-plan-entry,
+    .header-news-entry {
       border: none;
       background: linear-gradient(135deg, #FFD54F, #FFC107);
       color: #1a1a1a;
@@ -2686,7 +2637,7 @@
     <div class="page active" id="pageSearch">
       <div class="header">香港巴士到站時間
         <div class="header-actions">
-          <button type="button" class="header-news-entry" onclick="openNewsPage()" title="交通消息">📢 消息</button>
+          <button type="button" class="header-news-entry" onclick="openNewsPage()" title="交通消息">消息</button>
           <button type="button" class="header-plan-entry" onclick="openGoogleMapsSearch()" title="行程規劃">行程規劃</button>
           <button type="button" class="header-fav-entry" onclick="openFavsPage()">★ 最愛</button>
           <button type="button" class="header-nearby-entry" onclick="openNearbyPage()">📍 鄰近</button>
@@ -2737,7 +2688,7 @@
       </div>
     </div>
 
-    <div class="page" id="pageNews">
+        <div class="page" id="pageNews">
       <div class="news-header">
         <button type="button" class="back-btn" onclick="goSearch()">‹</button>
         <div class="page-title">交通消息</div>
@@ -2746,15 +2697,17 @@
       <div class="news-tabs" id="newsTabs">
         <button type="button" class="active" data-tab="all">全部</button>
         <button type="button" data-tab="td">運輸署</button>
+        <button type="button" data-tab="kmb">九巴／龍運</button>
+        <button type="button" data-tab="ctb">城巴</button>
+        <button type="button" data-tab="nlb">嶼巴</button>
         <button type="button" data-tab="mtr">港鐵</button>
-        <button type="button" data-tab="ops">巴士公司</button>
       </div>
       <div class="news-body" id="newsBody">
         <div class="news-empty">載入中…</div>
       </div>
     </div>
 
-    <div class="page" id="pagePlan">
+<div class="page" id="pagePlan">
       <div class="plan-header">
         <button type="button" class="back-btn" onclick="goSearch()">‹</button>
         <div class="page-title">點對點路線搜尋</div>
@@ -5258,13 +5211,20 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
           const res = await fetch(`https://data.etabus.gov.hk/v1/transport/kmb/eta/${stopId}/${route}/${service_type}`);
           const json = await res.json();
           if (json.data) {
+            const wantDir = (bound === 'in' || bound === 'I' || bound === 'inbound') ? 'I' : 'O';
             etas = json.data
-              .filter(e => e.eta)
+              .filter(e => {
+                if (!e.eta) return false;
+                const d = String(e.dir || '').toUpperCase();
+                if (!d) return true;
+                return d.startsWith(wantDir);
+              })
               .map(e => ({
                 eta: e.eta,
                 rmk: e.rmk_tc || e.rmk_en || '',
                 dest: e.dest_tc || e.dest_en || ''
-              }));
+              }))
+              .sort((a, b) => new Date(a.eta) - new Date(b.eta));
           }
         } else if (co === 'ctb') {
           const res = await fetch(`https://rt.data.gov.hk/v2/transport/citybus/eta/CTB/${stopId}/${route}`);
@@ -6367,9 +6327,15 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
     function estimateSegmentMinutes(a, b) {
       if (!a || !b || a.lat == null || b.lat == null) return 2;
       const m = haversineM(a.lat, a.lng, b.lat, b.lng);
-      // 市區巴士平均約 18 km/h（含停站），另加約 20 秒停站
-      const mins = (m / 1000) / 18 * 60 + 0.35;
-      return Math.max(1, Math.round(mins));
+      const km = m / 1000;
+      let speed, dwell;
+      if (km <= 0.35) { speed = 11; dwell = 0.45; }
+      else if (km <= 0.8) { speed = 14; dwell = 0.4; }
+      else if (km <= 1.5) { speed = 18; dwell = 0.35; }
+      else if (km <= 3.0) { speed = 26; dwell = 0.3; }
+      else if (km <= 6.0) { speed = 40; dwell = 0.25; }
+      else { speed = 52; dwell = 0.2; }
+      return Math.max(1, Math.round(km / speed * 60 + dwell));
     }
 
     function formatClock(d) {
@@ -6381,28 +6347,14 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
 
     // ========== 交通消息 ==========
     var _newsTab = 'all';
-    var _newsCache = { td: [], mtr: [], loaded: false, at: 0 };
+    var _newsCache = { td: [], mtr: [], co: { kmb: [], ctb: [], nlb: [] }, loaded: false, at: 0 };
+    var NEWS_BOOTSTRAP = {"ctb": [{"date": "10/10/2026", "title": "城巴聯手AlipayHK及支付寶推出城巴皇崗專線優惠 掃碼領券乘車即減2元", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2772&intLangID=2", "src": "ctb", "body": ""}, {"date": "09/10/2026", "title": "首選城巴皇崗專線 全城接通 過關輕鬆 港島轉乘優惠 往返皇崗車費一口價27.6元", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2771&intLangID=2", "src": "ctb", "body": ""}, {"date": "02/10/2026", "title": "城巴重陽節特別交通安排", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2770&intLangID=2", "src": "ctb", "body": ""}, {"date": "29/09/2026", "title": "城巴國慶黃金周期間加強旅遊及口岸路線服務 推預約式開篷巴士團「H0星光維港」", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2769&intLangID=2", "src": "ctb", "body": ""}, {"date": "23/09/2026", "title": "城巴開辦全新路線20X及22S 配合啟德醫院啟用 全面升級啟德交通網絡", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2768&intLangID=2", "src": "ctb", "body": ""}, {"date": "11/09/2026", "title": "城巴乘客聯絡小組會議於東涌 ( 翔東邨 ) 巴士總站舉行", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2767&intLangID=2", "src": "ctb", "body": ""}, {"date": "10/09/2026", "title": "城巴與理大簽署合作備忘錄 攜手推動模擬駕駛培訓 提升車長培訓成效及行車安全", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2766&intLangID=2", "src": "ctb", "body": ""}, {"date": "28/08/2026", "title": "城巴逾50條路線加強服務 繼續陪伴學生迎接新學年", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2765&intLangID=2", "src": "ctb", "body": ""}, {"date": "13/08/2026", "title": "城巴全力推進皇崗口岸籌備工作 將開辦三條全新口岸路線連接港島、九龍及新界", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2764&intLangID=2", "src": "ctb", "body": ""}, {"date": "05/08/2026", "title": "城巴機場快線全面覆蓋機場及港珠澳 美孚、深水埗及南昌首度享全天候日間及通宵機場巴士網絡", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2763&intLangID=2", "src": "ctb", "body": ""}, {"date": "30/07/2026", "title": "城巴將軍澳及日出康城巴士網絡提升 796X號線特快直達紅磡 790及796P號線往尖沙咀服務時間更長", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2762&intLangID=2", "src": "ctb", "body": ""}, {"date": "17/07/2026", "title": "城巴開辦770特快線連繫港島東與南全新香港仔隧道巴士轉乘站啟用 更多轉乘優惠同步登場", "url": "https://www.citybus.com.hk/whatsNew/pressReleaseDetails.aspx?intPressReleaseID=2760&intLangID=2", "src": "ctb", "body": ""}], "nlb": [{"date": "2026-10-09", "title": "嶼巴路線B12首日頭班車特別安排", "url": "https://nlb.com.hk/news/detail/650", "src": "nlb", "body": ""}, {"date": "2026-10-09", "title": "嶼巴開辦新路線B12號線", "url": "https://nlb.com.hk/news/detail/649", "src": "nlb", "body": ""}, {"date": "2026-09-22", "title": "國慶小童免費乘車日", "url": "https://nlb.com.hk/news/detail/648", "src": "nlb", "body": ""}, {"date": "2026-08-28", "title": "嶼巴路線37A加密班次", "url": "https://nlb.com.hk/news/detail/646", "src": "nlb", "body": ""}, {"date": "2026-08-19", "title": "新大嶼山巴士乘客聯絡小組會議將於東涌站巴士總站舉行", "url": "https://nlb.com.hk/news/detail/645", "src": "nlb", "body": ""}, {"date": "2026-08-16", "title": "嶼巴網頁及Apps系統升級及維護事宜", "url": "https://nlb.com.hk/news/detail/644", "src": "nlb", "body": ""}, {"date": "2026-08-07", "title": "翔東邨巴士總站位置搬遷", "url": "https://nlb.com.hk/news/detail/642", "src": "nlb", "body": ""}, {"date": "2026-07-23", "title": "嶼巴延長即日來回優惠", "url": "https://nlb.com.hk/news/detail/640", "src": "nlb", "body": ""}, {"date": "2026-07-10", "title": "嶼巴路線B2P採用非上學日時間表", "url": "https://nlb.com.hk/news/detail/639", "src": "nlb", "body": ""}, {"date": "2026-07-10", "title": "暑假期間部份特別班次暫停服務", "url": "https://nlb.com.hk/news/detail/638", "src": "nlb", "body": ""}, {"date": "2026-06-25", "title": "嶼巴路線36巴士站臨時取消", "url": "https://nlb.com.hk/news/detail/637", "src": "nlb", "body": ""}, {"date": "2026-06-25", "title": "嶼巴路線37A調整行車路線", "url": "https://nlb.com.hk/news/detail/636", "src": "nlb", "body": ""}], "kmb": []};
 
-    var NEWS_OP_LINKS = [
-      { co: 'kmb', name: '九巴', sub: '服務通告／改道／特別班次', icon: 'K', color: '#E4002B',
-        url: 'https://www.kmb.hk/news.html' },
-      { co: 'lwb', name: '龍運', sub: '機場／北大嶼山路線服務安排', icon: 'L', color: '#FF6200',
-        url: 'https://www.lwb.hk/' },
-      { co: 'ctb', name: '城巴', sub: '新聞稿／特別服務安排', icon: 'C', color: '#FFE14D', textColor: '#1a1a1a',
-        url: 'https://www.citybus.com.hk/whatsNew/pressRelease.aspx?intLangID=2' },
-      { co: 'nlb', name: '嶼巴', sub: '大嶼山巴士服務消息', icon: 'N', color: '#2E7D32',
-        url: 'https://nlb.com.hk/news' },
-      { co: 'mtr', name: '港鐵', sub: '列車服務最新消息', icon: 'M', color: '#9C1A1A',
-        url: 'https://www.mtr.com.hk/ch/customer/main/index.html' },
-      { co: 'td', name: '運輸署', sub: '特別交通及運輸措施通告', icon: '運', color: '#1565C0',
-        url: 'https://www.td.gov.hk/tc/traffic_notices/index_type_1.html' }
-    ];
-
-    var MTR_LINE_NAMES = {
-      TWL: '荃灣線', KTL: '觀塘線', ISL: '港島線', SIL: '南港島線',
-      TKL: '將軍澳線', TCL: '東涌線', AEL: '機場快線', TML: '屯馬線',
-      EAL: '東鐵線', DRL: '迪士尼線', MOL: '荃灣線', /* legacy */
-      EALR: '東鐵線', LR: '輕鐵'
+    var NEWS_CO_KEYS = {
+      kmb: { name: '九巴／龍運', keys: ['九巴', '九龍巴士', 'KMB', '龍運', 'Long Win', 'LWB'] },
+      ctb: { name: '城巴', keys: ['城巴', 'Citybus', 'CTB', '新巴'] },
+      nlb: { name: '嶼巴', keys: ['嶼巴', '新大嶼山', 'NLB', '大嶼山巴士'] },
+      mtr: { name: '港鐵', keys: ['港鐵', 'MTR', '地鐵', '輕鐵', '機場快線'] }
     };
 
     function openNewsPage() {
@@ -6415,37 +6367,60 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
           renderNewsBody();
         };
       });
+      if (!_newsCache.co.ctb.length) {
+        _newsCache.co = {
+          kmb: (NEWS_BOOTSTRAP.kmb || []).slice(),
+          ctb: (NEWS_BOOTSTRAP.ctb || []).slice(),
+          nlb: (NEWS_BOOTSTRAP.nlb || []).slice()
+        };
+      }
       loadNewsFeed(false);
     }
 
     async function loadNewsFeed(force) {
       var body = document.getElementById('newsBody');
       if (!body) return;
-      var now = Date.now();
-      if (!force && _newsCache.loaded && (now - _newsCache.at) < 60000) {
-        renderNewsBody();
-        return;
+      if (!force && _newsCache.loaded && (Date.now() - _newsCache.at) < 45000) {
+        renderNewsBody(); return;
       }
-      if (!force) body.innerHTML = '<div class="news-empty">載入交通消息中…</div>';
-
+      if (!_newsCache.co.ctb.length && NEWS_BOOTSTRAP.ctb) {
+        _newsCache.co = {
+          kmb: (NEWS_BOOTSTRAP.kmb || []).slice(),
+          ctb: (NEWS_BOOTSTRAP.ctb || []).slice(),
+          nlb: (NEWS_BOOTSTRAP.nlb || []).slice()
+        };
+      }
+      body.innerHTML = '<div class="news-empty">載入交通消息中…</div>';
       var tdList = [], mtrList = [];
       try {
         var res = await fetch('https://resource.data.one.gov.hk/td/tc/specialtrafficnews.xml', { cache: 'no-store' });
-        var text = await res.text();
-        tdList = parseTdSpecialNews(text);
-      } catch (e) {
-        console.warn('TD news', e);
-      }
+        tdList = parseTdSpecialNews(await res.text());
+      } catch (e) { console.warn('TD', e); }
       try {
         var mres = await fetch('https://www.mtr.com.hk/alert/ryg_line_status.xml', { cache: 'no-store' });
-        var mtext = await mres.text();
-        mtrList = parseMtrLineStatus(mtext);
-      } catch (e) {
-        console.warn('MTR status', e);
-      }
-
-      _newsCache = { td: tdList, mtr: mtrList, loaded: true, at: Date.now() };
+        mtrList = parseMtrLineStatus(await mres.text());
+      } catch (e) { console.warn('MTR', e); }
+      try { await refreshCtbNews(); } catch (e) {}
+      _newsCache.td = tdList;
+      _newsCache.mtr = mtrList;
+      _newsCache.loaded = true;
+      _newsCache.at = Date.now();
       renderNewsBody();
+    }
+
+    async function refreshCtbNews() {
+      var res = await fetch('https://www.citybus.com.hk/whatsNew/pressRelease.aspx?intLangID=2', { cache: 'no-store' });
+      if (!res.ok) return;
+      var html = await res.text();
+      var re = /(\d{2}\/\d{2}\/\d{4})\s*<\/td>\s*<td[^>]*>\s*<a\s+href="([^"]+)"[^>]*>([^<]+)<\/a>/gi;
+      var m, list = [];
+      while ((m = re.exec(html)) && list.length < 15) {
+        var href = m[2];
+        if (href.indexOf('http') !== 0)
+          href = href.charAt(0) === '/' ? ('https://www.citybus.com.hk' + href) : ('https://www.citybus.com.hk/whatsNew/' + href);
+        list.push({ date: m[1], title: m[3].replace(/\s+/g, ' ').trim(), url: href, src: 'ctb', body: '' });
+      }
+      if (list.length) _newsCache.co.ctb = list;
     }
 
     function parseTdSpecialNews(xmlText) {
@@ -6459,21 +6434,24 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
             var el = m.getElementsByTagName(tag)[0];
             return el ? (el.textContent || '').trim() : '';
           };
-          var status = get('CurrentStatus');
           var text = get('ChinText') || get('ChinShort') || get('EngText');
           if (!text) continue;
-          out.push({
-            id: get('msgID'),
-            text: text,
-            time: get('ReferenceDate'),
-            status: status, // 1=pending 2=active 3=cleared etc
-            src: 'td'
-          });
+          out.push({ id: get('msgID'), text: text, time: get('ReferenceDate'),
+            status: get('CurrentStatus'), src: 'td', cos: detectCos(text) });
         }
-      } catch (e) {
-        console.warn(e);
-      }
+      } catch (e) {}
       return out;
+    }
+
+    function detectCos(text) {
+      var found = [];
+      Object.keys(NEWS_CO_KEYS).forEach(function(co) {
+        var keys = NEWS_CO_KEYS[co].keys;
+        for (var i = 0; i < keys.length; i++) {
+          if (text.indexOf(keys[i]) >= 0) { found.push(co); break; }
+        }
+      });
+      return found;
     }
 
     function parseMtrLineStatus(xmlText) {
@@ -6481,19 +6459,19 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       try {
         var doc = new DOMParser().parseFromString(xmlText, 'text/xml');
         var lines = doc.getElementsByTagName('line');
+        var nameMap = {
+          TWL: '荃灣線', KTL: '觀塘線', ISL: '港島線', SIL: '南港島線',
+          TKL: '將軍澳線', TCL: '東涌線', AEL: '機場快線', TML: '屯馬線',
+          EAL: '東鐵線', DRL: '迪士尼線', MOL: '馬鞍山線', LR: '輕鐵'
+        };
         for (var i = 0; i < lines.length; i++) {
           var ln = lines[i];
           var code = (ln.getElementsByTagName('line_code')[0] || {}).textContent || '';
           var status = ((ln.getElementsByTagName('status')[0] || {}).textContent || 'green').toLowerCase();
-          var name = MTR_LINE_NAMES[code] || code;
           if (!code) continue;
-          out.push({ code: code, name: name, status: status, src: 'mtr' });
+          out.push({ code: code, name: nameMap[code] || code, status: status });
         }
-        var build = doc.getElementsByTagName('lastBuildDate')[0];
-        if (build) out._updated = build.textContent;
-      } catch (e) {
-        console.warn(e);
-      }
+      } catch (e) {}
       return out;
     }
 
@@ -6504,13 +6482,53 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       if (s === '1') return { t: '即將實施', c: 'info' };
       return { t: '消息', c: 'info' };
     }
-
     function mtrStatusLabel(s) {
       s = String(s || 'green').toLowerCase();
       if (s === 'green') return '正常';
       if (s === 'yellow') return '受阻';
       if (s === 'red') return '嚴重延誤';
       return s;
+    }
+    function escapeHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function newsCard(item, forceSrc) {
+      var st = statusLabel(item.status);
+      var src = forceSrc || item.src || 'td';
+      var srcName = { td: '運輸署', kmb: '九巴／龍運', ctb: '城巴', nlb: '嶼巴', mtr: '港鐵' }[src] || '運輸署';
+      return '<div class="news-card"><div class="nc-top">' +
+        '<span class="nc-src ' + src + '">' + srcName + '</span>' +
+        '<span class="nc-time">' + escapeHtml(item.time || item.date || '') + '</span></div>' +
+        '<div class="nc-text">' + escapeHtml(item.text || item.title || '') +
+          (item.body ? ('\n' + escapeHtml(item.body)) : '') + '</div>' +
+        (item.status != null ? '<span class="nc-status ' + st.c + '">' + st.t + '</span>' : '') +
+        '</div>';
+    }
+
+    function coNewsCard(item, src) {
+      var srcName = { kmb: '九巴／龍運', ctb: '城巴', nlb: '嶼巴' }[src] || src;
+      var text = item.title || '';
+      if (item.body) text += '\n' + item.body;
+      return '<div class="news-card"><div class="nc-top">' +
+        '<span class="nc-src ' + src + '">' + srcName + '</span>' +
+        '<span class="nc-time">' + escapeHtml(item.date || '') + '</span></div>' +
+        '<div class="nc-text">' + escapeHtml(text) + '</div>' +
+        '<span class="nc-status info">通告</span></div>';
+    }
+
+    function filterTdByCo(co) {
+      var list = _newsCache.td || [];
+      if (!co || co === 'td' || co === 'all') return list;
+      var keys = (NEWS_CO_KEYS[co] && NEWS_CO_KEYS[co].keys) || [];
+      return list.filter(function(item) {
+        if (item.cos && item.cos.indexOf(co) >= 0) return true;
+        var t = item.text || '';
+        for (var i = 0; i < keys.length; i++) {
+          if (t.indexOf(keys[i]) >= 0) return true;
+        }
+        return false;
+      });
     }
 
     function renderNewsBody() {
@@ -6519,76 +6537,86 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       var tab = _newsTab || 'all';
       var html = '';
 
-      if (tab === 'ops') {
-        NEWS_OP_LINKS.forEach(function(op) {
-          var tc = op.textColor || '#fff';
-          html += '<a class="news-link-card" href="' + op.url + '" target="_blank" rel="noopener">' +
-            '<div class="nlc-icon" style="background:' + op.color + ';color:' + tc + '">' + op.icon + '</div>' +
-            '<div class="nlc-body"><div class="nlc-title">' + op.name + '</div>' +
-            '<div class="nlc-sub">' + op.sub + '</div></div>' +
-            '<div class="nlc-arrow">›</div></a>';
-        });
-        body.innerHTML = html || '<div class="news-empty">暫無連結</div>';
-        return;
-      }
-
-      if (tab === 'mtr' || tab === 'all') {
+      if (tab === 'mtr') {
         var mtr = _newsCache.mtr || [];
         if (mtr.length) {
-          html += '<div class="news-card"><div class="nc-top">' +
-            '<span class="nc-src mtr">港鐵</span>' +
-            '<span class="nc-time">路線狀況</span></div>';
+          html += '<div class="news-card"><div class="nc-top"><span class="nc-src mtr">港鐵</span>' +
+            '<span class="nc-time">路線即時狀況</span></div>';
           mtr.forEach(function(ln) {
-            html += '<div class="news-mtr-row">' +
-              '<div class="news-mtr-dot ' + (ln.status || 'green') + '"></div>' +
-              '<div class="news-mtr-name">' + ln.name + '</div>' +
+            html += '<div class="news-mtr-row"><div class="news-mtr-dot ' + (ln.status || 'green') + '"></div>' +
+              '<div class="news-mtr-name">' + escapeHtml(ln.name) + '</div>' +
               '<div class="news-mtr-status">' + mtrStatusLabel(ln.status) + '</div></div>';
           });
           html += '</div>';
-        } else if (tab === 'mtr') {
-          html += '<div class="news-empty">未能載入港鐵路線狀況</div>';
         }
+        filterTdByCo('mtr').forEach(function(item) { html += newsCard(item, 'mtr'); });
+        if (!html) html = '<div class="news-empty">目前港鐵各線運作正常，暫無特別消息</div>';
+        body.innerHTML = html; return;
       }
 
-      if (tab === 'td' || tab === 'all') {
+      if (tab === 'kmb') {
+        ((_newsCache.co && _newsCache.co.kmb) || []).forEach(function(item) { html += coNewsCard(item, 'kmb'); });
+        var tdK = filterTdByCo('kmb');
+        if (tdK.length) {
+          html += '<div style="margin:12px 0 8px;font-size:0.8rem;font-weight:800;color:#5b6570">相關特別交通消息</div>';
+          tdK.forEach(function(item) { html += newsCard(item, 'kmb'); });
+        }
+        if (!html) {
+          html += '<div class="news-card"><div class="nc-top"><span class="nc-src kmb">九巴／龍運</span>' +
+            '<span class="nc-time">即時</span></div>' +
+            '<div class="nc-text">目前沒有九巴／龍運專屬通告。以下為運輸署最新路況，或會影響相關路線。</div>' +
+            '<span class="nc-status info">提示</span></div>';
+          (_newsCache.td || []).slice(0, 12).forEach(function(item) { html += newsCard(item); });
+        }
+        body.innerHTML = html; return;
+      }
+
+      if (tab === 'ctb' || tab === 'nlb') {
+        var list = (_newsCache.co && _newsCache.co[tab]) || NEWS_BOOTSTRAP[tab] || [];
+        list.forEach(function(item) { html += coNewsCard(item, tab); });
+        var tdC = filterTdByCo(tab);
+        if (tdC.length) {
+          html += '<div style="margin:12px 0 8px;font-size:0.8rem;font-weight:800;color:#5b6570">相關特別交通消息</div>';
+          tdC.forEach(function(item) { html += newsCard(item, tab); });
+        }
+        if (!html) html = '<div class="news-empty">暫無最新通告</div>';
+        body.innerHTML = html; return;
+      }
+
+      if (tab === 'td') {
         var td = _newsCache.td || [];
-        if (!td.length && tab === 'td') {
-          html += '<div class="news-empty">暫無運輸署特別交通消息</div>';
+        if (!td.length) html = '<div class="news-empty">暫無運輸署特別交通消息</div>';
+        else td.forEach(function(item) { html += newsCard(item); });
+        body.innerHTML = html; return;
+      }
+
+      // all
+      var mtrAll = _newsCache.mtr || [];
+      if (mtrAll.length) {
+        var hasIssue = mtrAll.some(function(l) { return l.status !== 'green'; });
+        html += '<div class="news-card"><div class="nc-top"><span class="nc-src mtr">港鐵</span>' +
+          '<span class="nc-time">' + (hasIssue ? '部分路線受影響' : '各線正常') + '</span></div>';
+        mtrAll.forEach(function(ln) {
+          html += '<div class="news-mtr-row"><div class="news-mtr-dot ' + (ln.status || 'green') + '"></div>' +
+            '<div class="news-mtr-name">' + escapeHtml(ln.name) + '</div>' +
+            '<div class="news-mtr-status">' + mtrStatusLabel(ln.status) + '</div></div>';
+        });
+        html += '</div>';
+      }
+      [['ctb','城巴'], ['nlb','嶼巴']].forEach(function(pair) {
+        var list = (_newsCache.co && _newsCache.co[pair[0]]) || NEWS_BOOTSTRAP[pair[0]] || [];
+        if (list.length) {
+          html += '<div style="margin:12px 0 8px;font-size:0.8rem;font-weight:800;color:#5b6570">' + pair[1] + '最新通告</div>';
+          list.slice(0, 3).forEach(function(item) { html += coNewsCard(item, pair[0]); });
         }
-        td.forEach(function(item) {
-          var st = statusLabel(item.status);
-          html += '<div class="news-card">' +
-            '<div class="nc-top">' +
-              '<span class="nc-src td">運輸署</span>' +
-              '<span class="nc-time">' + (item.time || '') + '</span>' +
-            '</div>' +
-            '<div class="nc-text">' + escapeHtml(item.text) + '</div>' +
-            '<span class="nc-status ' + st.c + '">' + st.t + '</span>' +
-          '</div>';
-        });
+      });
+      var tdAll = _newsCache.td || [];
+      if (tdAll.length) {
+        html += '<div style="margin:12px 0 8px;font-size:0.8rem;font-weight:800;color:#5b6570">運輸署特別交通消息</div>';
+        tdAll.forEach(function(item) { html += newsCard(item); });
       }
-
-      if (tab === 'all') {
-        html += '<div style="margin:14px 0 8px;font-size:0.8rem;font-weight:800;color:#5b6570">巴士／鐵路公司官方消息</div>';
-        NEWS_OP_LINKS.forEach(function(op) {
-          var tc = op.textColor || '#fff';
-          html += '<a class="news-link-card" href="' + op.url + '" target="_blank" rel="noopener">' +
-            '<div class="nlc-icon" style="background:' + op.color + ';color:' + tc + '">' + op.icon + '</div>' +
-            '<div class="nlc-body"><div class="nlc-title">' + op.name + '</div>' +
-            '<div class="nlc-sub">' + op.sub + '</div></div>' +
-            '<div class="nlc-arrow">›</div></a>';
-        });
-      }
-
-      body.innerHTML = html || '<div class="news-empty">暫無消息</div>';
-    }
-
-    function escapeHtml(s) {
-      return String(s || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+      if (!html) html = '<div class="news-empty">暫無消息，請稍後再刷新</div>';
+      body.innerHTML = html;
     }
 
 
