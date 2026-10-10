@@ -626,16 +626,18 @@
     .stop-item:active { background: #f2f2f7; }
     .stop-item-wrap.nearest .stop-item { background: #e8f6ff; }
     .stop-item-wrap.nearest .stop-seq {
-      background: #00A0E9;
-      color: #fff;
+      background: #0088d6;
+      color: #fff !important;
       border-radius: 50%;
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-size: 0.78rem;
-      box-shadow: 0 0 0 3px rgba(0, 160, 233, 0.3);
+      font-weight: 800;
+      box-shadow: 0 0 0 3px rgba(0, 136, 214, 0.4);
     }
     .stop-item-wrap.selected-stop .stop-item { background: #d6f0ff; }
     .stop-item-wrap.selected-stop {
@@ -729,6 +731,13 @@
       color: #6b7280;
       margin-top: 2px;
     }
+    
+    .stop-nearby-row .nr-eta {
+      font-size: 0.78rem; font-weight: 800; color: #1565C0;
+      white-space: nowrap; min-width: 3.2em; text-align: right; flex-shrink: 0;
+    }
+    .stop-nearby-row .nr-eta.soon { color: #c62828; }
+    .stop-nearby-row .nr-eta.mid { color: #f9a825; }
     .stop-nearby-row .nr-dist {
       flex-shrink: 0;
       font-size: 0.75rem;
@@ -1012,11 +1021,12 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.3);
     }
     .stop-marker-icon.active {
-      background: #00A0E9;
-      width: 30px;
-      height: 30px;
+      background: #0088d6;
+      width: 32px;
+      height: 32px;
       font-size: 12px;
-      box-shadow: 0 0 0 3px rgba(0, 160, 233, 0.35), 0 1px 4px rgba(0,0,0,.3);
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 4px rgba(0, 136, 214, 0.45), 0 2px 6px rgba(0,0,0,.35);
     }
     .eta-header-info {
       background: #1c1c1e;
@@ -4777,6 +4787,55 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         // 更新地圖（只含此方向車站）
         setTimeout(() => updateRouteMap(stops, nearestId), 50);
         await updateFareDisplay();
+
+        // 自動跳至現在位置最近車站
+        (function scrollToNearestStop() {
+          if (!nearestId) {
+            if (navigator.geolocation && state.userLat == null) {
+              navigator.geolocation.getCurrentPosition(function(pos) {
+                try {
+                  state.userLat = pos.coords.latitude;
+                  state.userLng = pos.coords.longitude;
+                  var best = null, bestD = Infinity;
+                  (state.currentStops || []).forEach(function(s) {
+                    if (s.lat == null || s.lng == null) return;
+                    var d = haversineM(state.userLat, state.userLng, s.lat, s.lng);
+                    s.distM = d;
+                    if (d < bestD) { bestD = d; best = s; }
+                  });
+                  if (!best) return;
+                  var list = document.getElementById('stopList');
+                  if (!list) return;
+                  list.querySelectorAll('.stop-item-wrap').forEach(function(w) {
+                    w.classList.remove('nearest');
+                    if (String(w.dataset.stopId) === String(best.id)) {
+                      w.classList.add('nearest');
+                      var distEl = w.querySelector('.stop-dist');
+                      if (distEl) {
+                        distEl.textContent = best.distM < 1000
+                          ? Math.round(best.distM) + ' m'
+                          : (best.distM / 1000).toFixed(1) + ' km';
+                      }
+                      try { w.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                      catch (e) { w.scrollIntoView(true); }
+                    }
+                  });
+                  try { updateRouteMap(state.currentStops, best.id); } catch (e2) {}
+                } catch (e3) {}
+              }, function() {}, { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 });
+            }
+            return;
+          }
+          var list2 = document.getElementById('stopList');
+          if (!list2) return;
+          var el = list2.querySelector('.stop-item-wrap.nearest') ||
+            list2.querySelector('.stop-item-wrap[data-stop-id="' + nearestId + '"]');
+          if (!el) return;
+          setTimeout(function() {
+            try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+            catch (e4) { el.scrollIntoView(true); }
+          }, 150);
+        })();
       } catch (e) {
         console.error('renderStops error', e);
         const isTimeout = e.name === 'AbortError';
@@ -5720,7 +5779,7 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         const rows = [];
         const lists = await Promise.all(sample.map(async ns => {
           try {
-            const routes = await fetchRoutesAtStop(ns.id, { skipEta: true });
+            const routes = await fetchRoutesAtStop(ns.id, { skipEta: false });
             return { ns, routes };
           } catch (_) {
             return { ns, routes: [] };
@@ -5751,18 +5810,39 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         const userHint = (state.userLat != null)
           ? '距離為與現在位置'
           : '距離為與此站';
-        box.innerHTML = '<div class="stop-nearby-head">鄰近 500 米路線 · ' + userHint + '</div>';
+        box.innerHTML = '<div class="stop-nearby-head">鄰近 500 米路線 · ' + userHint + ' · 首班到站</div>';
         rows.slice(0, 30).forEach(item => {
           const r = item.r, ns = item.stop;
           const dist = (state.userLat != null) ? ns.distFromUser : ns.distFromStop;
           const plate = (typeof plateClass === 'function') ? plateClass({ co: r.co, route: r.route }) : '';
           const row = document.createElement('div');
           row.className = 'stop-nearby-row';
-          row.innerHTML =
-            '<div class="nr-num ' + plate + '">' + displayRouteName(r) + '</div>' +
-            '<div class="nr-main"><div class="nr-dest">往 ' + (r.dest || '—') + '</div>' +
-            '<div class="nr-meta">' + coLabel(r.co) + ' · ' + (ns.name || '') + '</div></div>' +
-            '<div class="nr-dist">🚶 ' + fmtM(dist) + '</div>';
+          (function() {
+            function fmtNrEta(etas) {
+              if (!etas || !etas.length) return { t: '—', cls: '' };
+              var now = (typeof getQueryNow === 'function') ? getQueryNow() : Date.now();
+              var best = null;
+              etas.forEach(function(e) {
+                var raw = (e && e.eta) ? e.eta : e;
+                var ts = new Date(raw).getTime();
+                if (isNaN(ts)) return;
+                var mins = Math.round((ts - now) / 60000);
+                if (best == null || mins < best) best = mins;
+              });
+              if (best == null) return { t: '—', cls: '' };
+              if (best <= 0) return { t: '即將', cls: 'soon' };
+              if (best <= 5) return { t: best + '分', cls: 'soon' };
+              if (best <= 10) return { t: best + '分', cls: 'mid' };
+              return { t: best + '分', cls: '' };
+            }
+            var eta = fmtNrEta(r.etas || r.eta || []);
+            row.innerHTML =
+              '<div class="nr-num ' + plate + '">' + displayRouteName(r) + '</div>' +
+              '<div class="nr-main"><div class="nr-dest">往 ' + (r.dest || '—') + '</div>' +
+              '<div class="nr-meta">' + coLabel(r.co) + ' · ' + (ns.name || '') + '</div></div>' +
+              '<div class="nr-eta ' + eta.cls + '">' + eta.t + '</div>' +
+              '<div class="nr-dist">🚶 ' + fmtM(dist) + '</div>';
+          })();
           row.addEventListener('click', (e) => {
             e.stopPropagation();
             openNearbyRoute(r, ns);
@@ -9670,7 +9750,7 @@ const prefBtn = document.getElementById('planPrefBtn');
       if (!track) return;
       const imgs = track.querySelectorAll('img');
       imgs.forEach(function(img) { img.src = BUS_STRIP; img.decoding = 'async'; });
-      const speed = 48;
+      const speed = 24;
       let loopW = 0, x = 0, last = 0, raf = 0;
       function measure() {
         const img = imgs[0];
