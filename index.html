@@ -1560,6 +1560,136 @@
       gap: 6px;
       align-items: center;
     }
+
+    .header-news-entry {
+      border: none;
+      background: linear-gradient(135deg, #42A5F5, #1E88E5);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 7px 12px;
+      border-radius: 18px;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 2px 6px rgba(30,136,229,0.35);
+      white-space: nowrap;
+    }
+    .header-news-entry:active { transform: scale(0.96); opacity: 0.9; }
+
+    /* —— 交通消息頁 —— */
+    #pageNews { background: #f2f4f7; }
+    .news-header {
+      background: linear-gradient(135deg, #1E88E5, #1565C0);
+      color: #fff;
+      padding: 12px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .news-header .back-btn {
+      color: #fff; background: transparent; border: none;
+      font-size: 1.5rem; line-height: 1; padding: 0 4px; cursor: pointer;
+    }
+    .news-header .page-title {
+      flex: 1; text-align: center; font-weight: 800; font-size: 1rem;
+    }
+    .news-header .news-refresh {
+      border: 1.5px solid rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.15); color: #fff;
+      font-size: 0.78rem; font-weight: 700; padding: 5px 10px;
+      border-radius: 14px; cursor: pointer; font-family: inherit;
+    }
+    .news-tabs {
+      display: flex; gap: 6px; padding: 10px 10px 6px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      flex-shrink: 0; background: #fff;
+      border-bottom: 1px solid #e8ecf0;
+    }
+    .news-tabs button {
+      flex-shrink: 0; border: 1.5px solid #cfd8e3; background: #fff;
+      color: #3a4a5c; font-size: 0.78rem; font-weight: 700;
+      padding: 6px 12px; border-radius: 16px; cursor: pointer;
+      font-family: inherit; white-space: nowrap;
+    }
+    .news-tabs button.active {
+      background: linear-gradient(135deg, #1E88E5, #1565C0);
+      border-color: transparent; color: #fff;
+      box-shadow: 0 2px 8px rgba(30,136,229,0.3);
+    }
+    .news-body {
+      flex: 1; min-height: 0; overflow-y: auto;
+      -webkit-overflow-scrolling: touch; padding: 10px 12px 24px;
+    }
+    .news-card {
+      background: #fff; border-radius: 14px; padding: 12px 14px;
+      margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border: 1px solid #eef1f5;
+    }
+    .news-card .nc-top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 6px; gap: 8px;
+    }
+    .news-card .nc-src {
+      font-size: 0.72rem; font-weight: 800; padding: 3px 8px;
+      border-radius: 8px; color: #fff; flex-shrink: 0;
+    }
+    .news-card .nc-src.td { background: #1565C0; }
+    .news-card .nc-src.kmb { background: #E4002B; }
+    .news-card .nc-src.lwb { background: #FF6200; }
+    .news-card .nc-src.ctb { background: #FFE14D; color: #1a1a1a; }
+    .news-card .nc-src.nlb { background: #2E7D32; }
+    .news-card .nc-src.mtr { background: #9C1A1A; }
+    .news-card .nc-time {
+      font-size: 0.72rem; color: #8e8e93; font-weight: 600;
+      white-space: nowrap;
+    }
+    .news-card .nc-text {
+      font-size: 0.88rem; color: #1c1c1e; line-height: 1.45;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .news-card .nc-status {
+      display: inline-block; margin-top: 6px;
+      font-size: 0.7rem; font-weight: 700; padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .news-card .nc-status.active { background: #ffebee; color: #c62828; }
+    .news-card .nc-status.cleared { background: #e8f5e9; color: #2e7d32; }
+    .news-card .nc-status.info { background: #e3f2fd; color: #1565c0; }
+    .news-link-card {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; border-radius: 14px; padding: 14px;
+      margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border: 1px solid #eef1f5; text-decoration: none; color: inherit;
+    }
+    .news-link-card:active { background: #f5f7fa; }
+    .news-link-card .nlc-icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 900; color: #fff; flex-shrink: 0;
+    }
+    .news-link-card .nlc-body { flex: 1; min-width: 0; }
+    .news-link-card .nlc-title { font-size: 0.92rem; font-weight: 800; color: #1c1c1e; }
+    .news-link-card .nlc-sub { font-size: 0.75rem; color: #8e8e93; margin-top: 2px; }
+    .news-link-card .nlc-arrow { color: #c5cdd6; font-size: 1.1rem; }
+    .news-empty {
+      text-align: center; padding: 40px 16px; color: #8e8e93; font-size: 0.9rem;
+    }
+    .news-mtr-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+    }
+    .news-mtr-row:last-child { border-bottom: none; }
+    .news-mtr-dot {
+      width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+    }
+    .news-mtr-dot.green { background: #34c759; }
+    .news-mtr-dot.yellow { background: #ffcc00; }
+    .news-mtr-dot.red { background: #ff3b30; }
+    .news-mtr-dot.grey { background: #c7c7cc; }
+    .news-mtr-name { flex: 1; font-size: 0.9rem; font-weight: 700; color: #1c1c1e; }
+    .news-mtr-status { font-size: 0.78rem; font-weight: 700; color: #666; }
+
     .header-fav-entry,
     .header-nearby-entry,
     .header-plan-entry {
@@ -2556,6 +2686,7 @@
     <div class="page active" id="pageSearch">
       <div class="header">香港巴士到站時間
         <div class="header-actions">
+          <button type="button" class="header-news-entry" onclick="openNewsPage()" title="交通消息">📢 消息</button>
           <button type="button" class="header-plan-entry" onclick="openGoogleMapsSearch()" title="行程規劃">行程規劃</button>
           <button type="button" class="header-fav-entry" onclick="openFavsPage()">★ 最愛</button>
           <button type="button" class="header-nearby-entry" onclick="openNearbyPage()">📍 鄰近</button>
@@ -2603,6 +2734,23 @@
           <img alt="" class="bus-ticker-img" draggable="false">
           <img alt="" class="bus-ticker-img" draggable="false">
         </div>
+      </div>
+    </div>
+
+    <div class="page" id="pageNews">
+      <div class="news-header">
+        <button type="button" class="back-btn" onclick="goSearch()">‹</button>
+        <div class="page-title">交通消息</div>
+        <button type="button" class="news-refresh" onclick="loadNewsFeed(true)">刷新</button>
+      </div>
+      <div class="news-tabs" id="newsTabs">
+        <button type="button" class="active" data-tab="all">全部</button>
+        <button type="button" data-tab="td">運輸署</button>
+        <button type="button" data-tab="mtr">港鐵</button>
+        <button type="button" data-tab="ops">巴士公司</button>
+      </div>
+      <div class="news-body" id="newsBody">
+        <div class="news-empty">載入中…</div>
       </div>
     </div>
 
@@ -6219,17 +6367,8 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
     function estimateSegmentMinutes(a, b) {
       if (!a || !b || a.lat == null || b.lat == null) return 2;
       const m = haversineM(a.lat, a.lng, b.lat, b.lng);
-      const km = m / 1000;
-      // 依站距分級車速（對齊九巴／龍運官方時間表，如 E31 全程約 63–67 分）
-      // 短距市區含燈位停站較慢；青嶼幹線／北大嶼山公路等長距快速路較快
-      let speed, dwell;
-      if (km <= 0.35) { speed = 11; dwell = 0.45; }
-      else if (km <= 0.8) { speed = 14; dwell = 0.4; }
-      else if (km <= 1.5) { speed = 18; dwell = 0.35; }
-      else if (km <= 3.0) { speed = 26; dwell = 0.3; }
-      else if (km <= 6.0) { speed = 40; dwell = 0.25; }  // 跨區／快速路
-      else { speed = 52; dwell = 0.2; }                   // 大橋／高速公路
-      const mins = km / speed * 60 + dwell;
+      // 市區巴士平均約 18 km/h（含停站），另加約 20 秒停站
+      const mins = (m / 1000) / 18 * 60 + 0.35;
       return Math.max(1, Math.round(mins));
     }
 
@@ -6238,6 +6377,220 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       const mm = String(d.getMinutes()).padStart(2, '0');
       return hh + ':' + mm;
     }
+
+
+    // ========== 交通消息 ==========
+    var _newsTab = 'all';
+    var _newsCache = { td: [], mtr: [], loaded: false, at: 0 };
+
+    var NEWS_OP_LINKS = [
+      { co: 'kmb', name: '九巴', sub: '服務通告／改道／特別班次', icon: 'K', color: '#E4002B',
+        url: 'https://www.kmb.hk/news.html' },
+      { co: 'lwb', name: '龍運', sub: '機場／北大嶼山路線服務安排', icon: 'L', color: '#FF6200',
+        url: 'https://www.lwb.hk/' },
+      { co: 'ctb', name: '城巴', sub: '新聞稿／特別服務安排', icon: 'C', color: '#FFE14D', textColor: '#1a1a1a',
+        url: 'https://www.citybus.com.hk/whatsNew/pressRelease.aspx?intLangID=2' },
+      { co: 'nlb', name: '嶼巴', sub: '大嶼山巴士服務消息', icon: 'N', color: '#2E7D32',
+        url: 'https://nlb.com.hk/news' },
+      { co: 'mtr', name: '港鐵', sub: '列車服務最新消息', icon: 'M', color: '#9C1A1A',
+        url: 'https://www.mtr.com.hk/ch/customer/main/index.html' },
+      { co: 'td', name: '運輸署', sub: '特別交通及運輸措施通告', icon: '運', color: '#1565C0',
+        url: 'https://www.td.gov.hk/tc/traffic_notices/index_type_1.html' }
+    ];
+
+    var MTR_LINE_NAMES = {
+      TWL: '荃灣線', KTL: '觀塘線', ISL: '港島線', SIL: '南港島線',
+      TKL: '將軍澳線', TCL: '東涌線', AEL: '機場快線', TML: '屯馬線',
+      EAL: '東鐵線', DRL: '迪士尼線', MOL: '荃灣線', /* legacy */
+      EALR: '東鐵線', LR: '輕鐵'
+    };
+
+    function openNewsPage() {
+      showPage('pageNews');
+      document.querySelectorAll('#newsTabs button').forEach(function(btn) {
+        btn.onclick = function() {
+          document.querySelectorAll('#newsTabs button').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          _newsTab = btn.getAttribute('data-tab') || 'all';
+          renderNewsBody();
+        };
+      });
+      loadNewsFeed(false);
+    }
+
+    async function loadNewsFeed(force) {
+      var body = document.getElementById('newsBody');
+      if (!body) return;
+      var now = Date.now();
+      if (!force && _newsCache.loaded && (now - _newsCache.at) < 60000) {
+        renderNewsBody();
+        return;
+      }
+      if (!force) body.innerHTML = '<div class="news-empty">載入交通消息中…</div>';
+
+      var tdList = [], mtrList = [];
+      try {
+        var res = await fetch('https://resource.data.one.gov.hk/td/tc/specialtrafficnews.xml', { cache: 'no-store' });
+        var text = await res.text();
+        tdList = parseTdSpecialNews(text);
+      } catch (e) {
+        console.warn('TD news', e);
+      }
+      try {
+        var mres = await fetch('https://www.mtr.com.hk/alert/ryg_line_status.xml', { cache: 'no-store' });
+        var mtext = await mres.text();
+        mtrList = parseMtrLineStatus(mtext);
+      } catch (e) {
+        console.warn('MTR status', e);
+      }
+
+      _newsCache = { td: tdList, mtr: mtrList, loaded: true, at: Date.now() };
+      renderNewsBody();
+    }
+
+    function parseTdSpecialNews(xmlText) {
+      var out = [];
+      try {
+        var doc = new DOMParser().parseFromString(xmlText, 'text/xml');
+        var msgs = doc.getElementsByTagName('message');
+        for (var i = 0; i < msgs.length; i++) {
+          var m = msgs[i];
+          var get = function(tag) {
+            var el = m.getElementsByTagName(tag)[0];
+            return el ? (el.textContent || '').trim() : '';
+          };
+          var status = get('CurrentStatus');
+          var text = get('ChinText') || get('ChinShort') || get('EngText');
+          if (!text) continue;
+          out.push({
+            id: get('msgID'),
+            text: text,
+            time: get('ReferenceDate'),
+            status: status, // 1=pending 2=active 3=cleared etc
+            src: 'td'
+          });
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+      return out;
+    }
+
+    function parseMtrLineStatus(xmlText) {
+      var out = [];
+      try {
+        var doc = new DOMParser().parseFromString(xmlText, 'text/xml');
+        var lines = doc.getElementsByTagName('line');
+        for (var i = 0; i < lines.length; i++) {
+          var ln = lines[i];
+          var code = (ln.getElementsByTagName('line_code')[0] || {}).textContent || '';
+          var status = ((ln.getElementsByTagName('status')[0] || {}).textContent || 'green').toLowerCase();
+          var name = MTR_LINE_NAMES[code] || code;
+          if (!code) continue;
+          out.push({ code: code, name: name, status: status, src: 'mtr' });
+        }
+        var build = doc.getElementsByTagName('lastBuildDate')[0];
+        if (build) out._updated = build.textContent;
+      } catch (e) {
+        console.warn(e);
+      }
+      return out;
+    }
+
+    function statusLabel(s) {
+      s = String(s || '');
+      if (s === '2') return { t: '進行中', c: 'active' };
+      if (s === '3') return { t: '已解除', c: 'cleared' };
+      if (s === '1') return { t: '即將實施', c: 'info' };
+      return { t: '消息', c: 'info' };
+    }
+
+    function mtrStatusLabel(s) {
+      s = String(s || 'green').toLowerCase();
+      if (s === 'green') return '正常';
+      if (s === 'yellow') return '受阻';
+      if (s === 'red') return '嚴重延誤';
+      return s;
+    }
+
+    function renderNewsBody() {
+      var body = document.getElementById('newsBody');
+      if (!body) return;
+      var tab = _newsTab || 'all';
+      var html = '';
+
+      if (tab === 'ops') {
+        NEWS_OP_LINKS.forEach(function(op) {
+          var tc = op.textColor || '#fff';
+          html += '<a class="news-link-card" href="' + op.url + '" target="_blank" rel="noopener">' +
+            '<div class="nlc-icon" style="background:' + op.color + ';color:' + tc + '">' + op.icon + '</div>' +
+            '<div class="nlc-body"><div class="nlc-title">' + op.name + '</div>' +
+            '<div class="nlc-sub">' + op.sub + '</div></div>' +
+            '<div class="nlc-arrow">›</div></a>';
+        });
+        body.innerHTML = html || '<div class="news-empty">暫無連結</div>';
+        return;
+      }
+
+      if (tab === 'mtr' || tab === 'all') {
+        var mtr = _newsCache.mtr || [];
+        if (mtr.length) {
+          html += '<div class="news-card"><div class="nc-top">' +
+            '<span class="nc-src mtr">港鐵</span>' +
+            '<span class="nc-time">路線狀況</span></div>';
+          mtr.forEach(function(ln) {
+            html += '<div class="news-mtr-row">' +
+              '<div class="news-mtr-dot ' + (ln.status || 'green') + '"></div>' +
+              '<div class="news-mtr-name">' + ln.name + '</div>' +
+              '<div class="news-mtr-status">' + mtrStatusLabel(ln.status) + '</div></div>';
+          });
+          html += '</div>';
+        } else if (tab === 'mtr') {
+          html += '<div class="news-empty">未能載入港鐵路線狀況</div>';
+        }
+      }
+
+      if (tab === 'td' || tab === 'all') {
+        var td = _newsCache.td || [];
+        if (!td.length && tab === 'td') {
+          html += '<div class="news-empty">暫無運輸署特別交通消息</div>';
+        }
+        td.forEach(function(item) {
+          var st = statusLabel(item.status);
+          html += '<div class="news-card">' +
+            '<div class="nc-top">' +
+              '<span class="nc-src td">運輸署</span>' +
+              '<span class="nc-time">' + (item.time || '') + '</span>' +
+            '</div>' +
+            '<div class="nc-text">' + escapeHtml(item.text) + '</div>' +
+            '<span class="nc-status ' + st.c + '">' + st.t + '</span>' +
+          '</div>';
+        });
+      }
+
+      if (tab === 'all') {
+        html += '<div style="margin:14px 0 8px;font-size:0.8rem;font-weight:800;color:#5b6570">巴士／鐵路公司官方消息</div>';
+        NEWS_OP_LINKS.forEach(function(op) {
+          var tc = op.textColor || '#fff';
+          html += '<a class="news-link-card" href="' + op.url + '" target="_blank" rel="noopener">' +
+            '<div class="nlc-icon" style="background:' + op.color + ';color:' + tc + '">' + op.icon + '</div>' +
+            '<div class="nlc-body"><div class="nlc-title">' + op.name + '</div>' +
+            '<div class="nlc-sub">' + op.sub + '</div></div>' +
+            '<div class="nlc-arrow">›</div></a>';
+        });
+      }
+
+      body.innerHTML = html || '<div class="news-empty">暫無消息</div>';
+    }
+
+    function escapeHtml(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
 
     async function openJourneyPage(boardStop) {
       const stops = state.currentStops || [];
