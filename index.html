@@ -6026,9 +6026,11 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
       function attachEta(route, cos, dir, dest, etaVal, extra) {
         if (!etaVal || !route) return;
         const coSet = (cos || []).map(function(x) { return String(x).toLowerCase(); });
+        const routeStr = String(route);
         let attached = false;
         for (const v of routeMap.values()) {
-          if (String(v.route) !== String(route) && resolveGmbRouteCode(v.route) !== resolveGmbRouteCode(route)) continue;
+          const vr = String(v.route || '');
+          if (vr !== routeStr && resolveGmbRouteCode(vr) !== resolveGmbRouteCode(routeStr)) continue;
           const vc = String(v.co || '').toLowerCase();
           if (coSet.length && coSet.indexOf(vc) < 0) continue;
           v.etas = v.etas || [];
@@ -6037,7 +6039,7 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
         }
         if (!attached) {
           const co0 = coSet[0] || 'kmb';
-          let rn = String(route);
+          let rn = routeStr;
           if (co0 === 'gmb') rn = resolveGmbRouteCode(rn);
           const rkey = rn + '|' + co0 + '|' + (dir || 'O') + '|' + (dest || '');
           if (!routeMap.has(rkey)) {
@@ -6103,23 +6105,36 @@ const MTR_STOPS = {"K12_O": [{"s": 1, "i": "K12-U010", "n": "大埔墟站"}, {"s
               const json = await res.json();
               const routeIds = [];
               (json.data || []).forEach(function(e) {
-                const route = e.route || e.routeName;
+                const route = e.route || e.routeName || e.routeNo;
                 if (!route) return;
                 const dir = e.dir || 'O';
-                const dest = e.routeName || e.dest || '';
+                const dest = e.dest || e.routeName || '';
+                const rid = e.routeId || e.route_id || null;
                 const rkey = route + '|nlb|' + dir + '|' + dest;
                 if (!routeMap.has(rkey)) {
-                  routeMap.set(rkey, { route: route, co: 'nlb', dir: dir, dest: dest || route, service_type: '1', nlbId: e.routeId || null, etas: [] });
-                } else if (e.routeId) routeMap.get(rkey).nlbId = e.routeId;
-                if (e.routeId) routeIds.push({ routeId: e.routeId, route: route });
+                  routeMap.set(rkey, { route: String(route), co: 'nlb', dir: dir, dest: dest || String(route), service_type: '1', nlbId: rid, etas: [] });
+                } else if (rid) routeMap.get(rkey).nlbId = rid;
+                if (rid) routeIds.push({ routeId: rid, route: String(route) });
               });
-              await Promise.all(routeIds.map(async function(ri) {
+              for (const v of routeMap.values()) {
+                if (String(v.co).toLowerCase() !== 'nlb') continue;
+                if (v.nlbId) routeIds.push({ routeId: v.nlbId, route: String(v.route) });
+              }
+              const seenRid = new Set();
+              const uniq = [];
+              routeIds.forEach(function(ri) {
+                const k = String(ri.routeId);
+                if (seenRid.has(k)) return;
+                seenRid.add(k);
+                uniq.push(ri);
+              });
+              await Promise.all(uniq.map(async function(ri) {
                 try {
                   const r2 = await fetch('https://rt.data.gov.hk/v2/transport/nlb/stop.php?action=estimatedArrivals&routeId=' +
                     encodeURIComponent(ri.routeId) + '&stopId=' + encodeURIComponent(opId) + '&language=zh');
                   const j2 = await r2.json();
                   (j2.estimatedArrivals || j2.data || []).forEach(function(e) {
-                    const eta = e.estimatedArrival || e.eta || e.time;
+                    const eta = e.estimatedArrival || e.eta || e.time || e.departedTime;
                     if (eta) attachEta(ri.route, ['nlb'], 'O', '', eta, { nlbId: ri.routeId });
                   });
                 } catch (_) {}
